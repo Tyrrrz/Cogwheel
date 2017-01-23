@@ -5,7 +5,7 @@
     <ProjectGuid>{C2BCAF75-BF56-43AC-B349-F3000784E659}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Tyrrrz.Settings</RootNamespace>
-    <AssemblyName>Settings</AssemblyName>
+    <AssemblyName>Tyrrrz.Settings</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug 4.5|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -16,7 +16,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <DocumentationFile>bin\Debug 4.5\Settings.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug 4.5\Tyrrrz.Settings.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 4.5|AnyCPU'">
     <DebugType>pdbonly</DebugType>
@@ -26,7 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <DocumentationFile>bin\Release 4.5\Settings.XML</DocumentationFile>
+    <DocumentationFile>bin\Release 4.5\Tyrrrz.Settings.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release 4.0|AnyCPU'">
     <DebugType>pdbonly</DebugType>
@@ -36,7 +36,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <DocumentationFile>bin\Release 4.0\Settings.XML</DocumentationFile>
+    <DocumentationFile>bin\Release 4.0\Tyrrrz.Settings.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
