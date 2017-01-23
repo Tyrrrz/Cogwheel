@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Settings Manager")]
-[assembly: AssemblyCopyright("Copyright © Tyrrrz 2015")]
+[assembly: AssemblyCopyright("Copyright © Tyrrrz 2015-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
