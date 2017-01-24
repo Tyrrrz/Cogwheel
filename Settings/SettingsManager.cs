@@ -52,10 +52,10 @@ namespace Tyrrrz.Settings
                 default:
                     storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                     break;
-                case Configuration.StorageSpace.LocalAppData:
+                case StorageSpace.LocalAppData:
                     storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                     break;
-                case Configuration.StorageSpace.MyDocuments:
+                case StorageSpace.MyDocuments:
                     storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     break;
             }

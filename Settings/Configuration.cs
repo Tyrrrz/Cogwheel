@@ -6,27 +6,6 @@
     public class Configuration
     {
         /// <summary>
-        /// Determines where the settings files will be stored
-        /// </summary>
-        public enum StorageSpace
-        {
-            /// <summary>
-            /// The settings file is stored in %appdata% folder
-            /// </summary>
-            RoamingAppData,
-
-            /// <summary>
-            /// The settings file is stored in %localappdata% folder
-            /// </summary>
-            LocalAppData,
-
-            /// <summary>
-            /// The settings file is stored in My Documents folder
-            /// </summary>
-            MyDocuments
-        }
-
-        /// <summary>
         /// Subdirectory path for where the settings file is stored, relative to the selected StorageSpace
         /// </summary>
         public string SubdirectoryPath { get; }
