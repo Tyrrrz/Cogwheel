@@ -1,36 +1,105 @@
-﻿namespace Tyrrrz.Settings
+﻿using System;
+using System.IO;
+
+namespace Tyrrrz.Settings
 {
     /// <summary>
     /// Configuration object for the SettingsManager class
     /// </summary>
     public class Configuration
     {
-        /// <summary>
-        /// Subdirectory path for where the settings file is stored, relative to the selected StorageSpace
-        /// </summary>
-        public string SubdirectoryPath { get; }
+        private StorageSpace _fileStorageSpace = StorageSpace.RoamingAppData;
+        private string _subDirectoryPath = string.Empty;
+        private string _fileName = "Settings.dat";
+        private string _fullDirectoryPath;
+        private string _fullFilePath;
 
         /// <summary>
         /// Type of storage, where the settings file will be stored
         /// </summary>
-        public StorageSpace FileStorageSpace { get; }
+        public StorageSpace FileStorageSpace
+        {
+            get { return _fileStorageSpace; }
+            set
+            {
+                _fileStorageSpace = value;
+                UpdateFullDirectoryPath();
+            }
+        }
+
+        /// <summary>
+        /// Subdirectory path for where the settings file is stored, relative to the selected <see cref="FileStorageSpace"/>
+        /// </summary>
+        public string SubDirectoryPath
+        {
+            get { return _subDirectoryPath; }
+            set
+            {
+                _subDirectoryPath = value;
+                UpdateFullDirectoryPath();
+            }
+        }
 
         /// <summary>
         /// Name of the settings file
         /// </summary>
-        public string FileName { get; }
+        public string FileName
+        {
+            get { return _fileName; }
+            set
+            {
+                _fileName = value;
+                UpdateFullFilePath();
+            }
+        }
 
         /// <summary>
-        /// Creates a settings manager configuration object with given values
+        /// Full path to the directory, where the settings are stored
         /// </summary>
-        public Configuration(
-            string subdirectoryPath = "",
-            string fileName = "Settings.dat",
-            StorageSpace fileStorageSpace = StorageSpace.RoamingAppData)
+        public string FullDirectoryPath
         {
-            SubdirectoryPath = subdirectoryPath;
-            FileName = fileName;
-            FileStorageSpace = fileStorageSpace;
+            get { return _fullDirectoryPath; }
+            private set
+            {
+                _fullDirectoryPath = value;
+                UpdateFullFilePath();
+            }
+        }
+
+        /// <summary>
+        /// Full path to the file, where the settings are stored
+        /// </summary>
+        // ReSharper disable once ConvertToAutoProperty
+        public string FullFilePath
+        {
+            get { return _fullFilePath; }
+            private set { _fullFilePath = value; }
+        }
+
+        private void UpdateFullDirectoryPath()
+        {
+            string root;
+            switch (FileStorageSpace)
+            {
+                case StorageSpace.RoamingAppData:
+                    root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                    break;
+                case StorageSpace.LocalAppData:
+                    root = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    break;
+                case StorageSpace.MyDocuments:
+                    root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            FullDirectoryPath = Path.Combine(root, SubDirectoryPath);
+        }
+
+        private void UpdateFullFilePath()
+        {
+            FullFilePath = Path.Combine(FullDirectoryPath, FileName);
         }
     }
 }

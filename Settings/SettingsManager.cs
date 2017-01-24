@@ -8,21 +8,18 @@ using Newtonsoft.Json;
 namespace Tyrrrz.Settings
 {
     /// <summary>
-    /// Derive from this class to create a custom settings manager that can de-/serialize its public properties from/to persistent storage
+    /// Derive from this class to create a custom settings manager that can de-/serialize its public properties from/to file
     /// </summary>
     public abstract class SettingsManager : ObservableObject
     {
-        [IgnoreDataMember] private bool _isSaved = true;
+        [IgnoreDataMember]
+        private bool _isSaved = true;
 
         /// <summary>
-        /// Storage directory for the settings file
+        /// Configuration object
         /// </summary>
-        [IgnoreDataMember] public string StorageDirectory { get; }
-
-        /// <summary>
-        /// Settings file path
-        /// </summary>
-        [IgnoreDataMember] public string SettingsFilePath { get; }
+        [IgnoreDataMember]
+        public Configuration Configuration { get; set; }
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
@@ -33,10 +30,8 @@ namespace Tyrrrz.Settings
             get { return _isSaved; }
             protected set
             {
-                if (_isSaved == value)
-                    return;
-                _isSaved = value;
-                RaisePropertyChanged();
+                // ReSharper disable once ExplicitCallerInfoArgument
+                base.Set(ref _isSaved, value, nameof(IsSaved));
             }
         }
 
@@ -45,29 +40,19 @@ namespace Tyrrrz.Settings
         /// </summary>
         protected SettingsManager(Configuration configuration)
         {
-            // Configure settings manager
-            string storageSpacePath;
-            switch (configuration.FileStorageSpace)
-            {
-                default:
-                    storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    break;
-                case StorageSpace.LocalAppData:
-                    storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                    break;
-                case StorageSpace.MyDocuments:
-                    storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    break;
-            }
-            StorageDirectory = Path.Combine(storageSpacePath, configuration.SubdirectoryPath);
-            SettingsFilePath = Path.Combine(StorageDirectory, configuration.FileName);
+            Configuration = configuration;
         }
 
         /// <summary>
         /// Creates a settings manager with default configuration
         /// </summary>
-        protected SettingsManager() : this(new Configuration(Assembly.GetCallingAssembly().GetName().Name))
+        protected SettingsManager()
         {
+            Configuration = new Configuration
+            {
+                SubDirectoryPath = Assembly.GetCallingAssembly().GetName().Name,
+                FileName = GetType().Name + ".dat"
+            };
         }
 
         /// <inheritdoc />
@@ -79,13 +64,12 @@ namespace Tyrrrz.Settings
         {
             // ReSharper disable once ExplicitCallerInfoArgument
             bool changed = base.Set(ref field, value, propertyName);
-            if (changed)
-                IsSaved = false;
+            if (changed) IsSaved = false;
             return changed;
         }
 
         /// <summary>
-        /// Copies values of the public and writeable properties from the given settings manager to the current
+        /// Copies values of accessable properties from the given settings manager into the current
         /// </summary>
         public virtual void CopyFrom(SettingsManager referenceSettingsManager)
         {
@@ -99,17 +83,10 @@ namespace Tyrrrz.Settings
         public virtual void Save()
         {
             // Create the directory
-            try
-            {
-                Directory.CreateDirectory(StorageDirectory);
-            }
-            catch
-            {
-                // Ignored
-            }
+            Directory.CreateDirectory(Configuration.FullDirectoryPath);
 
             // Write file
-            File.WriteAllText(SettingsFilePath, JsonConvert.SerializeObject(this, Formatting.Indented));
+            File.WriteAllText(Configuration.FullFilePath, JsonConvert.SerializeObject(this, Formatting.Indented));
             IsSaved = true;
         }
 
@@ -134,8 +111,8 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void Load()
         {
-            if (!File.Exists(SettingsFilePath)) return;
-            JsonConvert.PopulateObject(File.ReadAllText(SettingsFilePath), this);
+            if (!File.Exists(Configuration.FullFilePath)) return;
+            JsonConvert.PopulateObject(File.ReadAllText(Configuration.FullFilePath), this);
             IsSaved = true;
         }
 
@@ -166,14 +143,14 @@ namespace Tyrrrz.Settings
         }
 
         /// <summary>
-        /// Deletes settings file
+        /// Deletes the settings file and, optionally, the containing directory
         /// </summary>
         public virtual void Delete(bool deleteStorageDirectory = false)
         {
-            if (deleteStorageDirectory && Directory.Exists(StorageDirectory))
-                Directory.Delete(StorageDirectory, true);
-            else if (File.Exists(SettingsFilePath))
-                File.Delete(SettingsFilePath);
+            if (deleteStorageDirectory && Directory.Exists(Configuration.FullDirectoryPath))
+                Directory.Delete(Configuration.FullDirectoryPath, true);
+            else if (File.Exists(Configuration.FullFilePath))
+                File.Delete(Configuration.FullFilePath);
         }
     }
 }
