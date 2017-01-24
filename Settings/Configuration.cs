@@ -3,7 +3,7 @@
     /// <summary>
     /// Configuration object for the SettingsManager class
     /// </summary>
-    public class SettingsManagerConfiguration
+    public class Configuration
     {
         /// <summary>
         /// Determines where the settings files will be stored
@@ -44,7 +44,7 @@
         /// <summary>
         /// Creates a settings manager configuration object with given values
         /// </summary>
-        public SettingsManagerConfiguration(
+        public Configuration(
             string subdirectoryPath = "",
             string fileName = "Settings.dat",
             StorageSpace fileStorageSpace = StorageSpace.RoamingAppData)

@@ -43,7 +43,7 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Creates a settings manager object with custom configuration
         /// </summary>
-        protected SettingsManager(SettingsManagerConfiguration configuration)
+        protected SettingsManager(Configuration configuration)
         {
             // Configure settings manager
             string storageSpacePath;
@@ -52,10 +52,10 @@ namespace Tyrrrz.Settings
                 default:
                     storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                     break;
-                case SettingsManagerConfiguration.StorageSpace.LocalAppData:
+                case Configuration.StorageSpace.LocalAppData:
                     storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                     break;
-                case SettingsManagerConfiguration.StorageSpace.MyDocuments:
+                case Configuration.StorageSpace.MyDocuments:
                     storageSpacePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                     break;
             }
@@ -66,7 +66,7 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Creates a settings manager with default configuration
         /// </summary>
-        protected SettingsManager() : this(new SettingsManagerConfiguration(Assembly.GetCallingAssembly().GetName().Name))
+        protected SettingsManager() : this(new Configuration(Assembly.GetCallingAssembly().GetName().Name))
         {
         }
 

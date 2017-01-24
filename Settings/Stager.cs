@@ -6,7 +6,7 @@ namespace Tyrrrz.Settings
     /// Stages changes in a settings manager object, exposing them only after they are saved
     /// </summary>
     /// <typeparam name="T">Type of this object</typeparam>
-    public class SettingsManagerStager<T> where T : SettingsManager
+    public class Stager<T> where T : SettingsManager
     {
         /// <summary>
         /// Current settings manager, all properties are up to date with the persistently stored version. Use only as read-only.
@@ -21,7 +21,7 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Create a stager for a settings manager with the default configuration
         /// </summary>
-        public SettingsManagerStager()
+        public Stager()
         {
             Current = (T) Activator.CreateInstance(typeof (T));
             Staging = (T) Activator.CreateInstance(typeof (T));
@@ -30,7 +30,7 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Creates a stager for a settings manager, using a factory delegate
         /// </summary>
-        public SettingsManagerStager(Func<T> settingsFactory)
+        public Stager(Func<T> settingsFactory)
         {
             Current = settingsFactory();
             Staging = settingsFactory();

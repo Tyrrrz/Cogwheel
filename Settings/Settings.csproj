@@ -58,8 +58,8 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsManagerConfiguration.cs" />
-    <Compile Include="SettingsManagerStager.cs" />
+    <Compile Include="Configuration.cs" />
+    <Compile Include="Stager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
