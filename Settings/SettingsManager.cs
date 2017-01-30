@@ -10,7 +10,7 @@ namespace Tyrrrz.Settings
     /// <summary>
     /// Derive from this class to create a custom settings manager that can de-/serialize its public properties from/to file
     /// </summary>
-    public abstract class SettingsManager : ObservableObject
+    public abstract class SettingsManager : ObservableObject, ICloneable
     {
         [IgnoreDataMember]
         private bool _isSaved = true;
@@ -151,6 +151,16 @@ namespace Tyrrrz.Settings
                 Directory.Delete(Configuration.FullDirectoryPath, true);
             else if (File.Exists(Configuration.FullFilePath))
                 File.Delete(Configuration.FullFilePath);
+        }
+
+        /// <summary>
+        /// Clones this <see cref="SettingsManager"/> along with current values of its properties
+        /// </summary>
+        public object Clone()
+        {
+            var clone = (SettingsManager) Activator.CreateInstance(GetType());
+            clone.CopyFrom(this);
+            return clone;
         }
     }
 }
