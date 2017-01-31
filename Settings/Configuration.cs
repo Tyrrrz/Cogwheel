@@ -76,6 +76,14 @@ namespace Tyrrrz.Settings
             private set { _fullFilePath = value; }
         }
 
+        /// <inheritdoc />
+        public Configuration()
+        {
+            // Propagate defaults
+            UpdateFullDirectoryPath();
+            UpdateFullFilePath();
+        }
+
         private void UpdateFullDirectoryPath()
         {
             string root;
