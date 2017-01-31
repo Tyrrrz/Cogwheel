@@ -8,7 +8,8 @@ My settings library.
 - Handles any type that can be serialized by Newtonsoft.Json
 - Can have default values
 - Supports versioning
-- Can utilize INotifyPropertyChanged
+- Implements INotifyPropertyChanged
+- Implements ICloneable with deep copy via Newtonsoft.Json
 - Has safe methods for when a file cannot be loaded/saved due to an exception
 - Offers a staging system, which exposes two instances of settings: one (stable) for application and another (dirty) for making changes
 - More...
