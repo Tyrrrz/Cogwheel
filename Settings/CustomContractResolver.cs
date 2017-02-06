@@ -31,7 +31,7 @@ namespace Tyrrrz.Settings
             return
                 base.CreateProperties(type, memberSerialization)
                     // Not ignored
-                    .Where(p => !p.PropertyType.GetCustomAttributes(typeof(IgnorePropertyAttribute)).Any())
+                    .Where(p => !p.PropertyType.GetCustomAttributes(typeof(IgnorePropertyAttribute), false).Any())
                     // Writable
                     .Where(p => p.Writable)
                     .ToList();
