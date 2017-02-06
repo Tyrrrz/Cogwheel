@@ -15,7 +15,6 @@
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System" />
       <frameworkAssembly assemblyName="System.Core" />
-      <frameworkAssembly assemblyName="System.Runtime.Serialization" />
     </frameworkAssemblies>
 
     <dependencies>
