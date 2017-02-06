@@ -28,8 +28,13 @@ namespace Tyrrrz.Settings
 
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            // Only writable properties
-            return base.CreateProperties(type, memberSerialization).Where(p => p.Writable).ToArray();
+            return
+                base.CreateProperties(type, memberSerialization)
+                    // Not ignored
+                    .Where(p => !p.PropertyType.GetCustomAttributes(typeof(IgnorePropertyAttribute)).Any())
+                    // Writable
+                    .Where(p => p.Writable)
+                    .ToList();
         }
 
         protected override JsonObjectContract CreateObjectContract(Type objectType)

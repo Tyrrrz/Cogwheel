@@ -2,7 +2,6 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Tyrrrz.Settings
@@ -18,19 +17,19 @@ namespace Tyrrrz.Settings
             ContractResolver = CustomContractResolver.Instance
         };
 
-        [IgnoreDataMember]
+        [IgnoreProperty]
         private bool _isSaved = true;
 
         /// <summary>
         /// Configuration object
         /// </summary>
-        [IgnoreDataMember]
+        [IgnoreProperty]
         public Configuration Configuration { get; set; }
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
         /// </summary>
-        [IgnoreDataMember]
+        [IgnoreProperty]
         public bool IsSaved
         {
             get { return _isSaved; }
