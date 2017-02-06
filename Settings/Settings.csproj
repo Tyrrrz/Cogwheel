@@ -54,6 +54,7 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomContractResolver.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="SettingsManager.cs" />

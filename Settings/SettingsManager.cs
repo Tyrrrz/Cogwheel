@@ -12,6 +12,12 @@ namespace Tyrrrz.Settings
     /// </summary>
     public abstract class SettingsManager : ObservableObject, ICloneable
     {
+        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            ContractResolver = CustomContractResolver.Instance
+        };
+
         [IgnoreDataMember]
         private bool _isSaved = true;
 
@@ -73,7 +79,8 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void CopyFrom(SettingsManager referenceSettingsManager)
         {
-            JsonConvert.PopulateObject(JsonConvert.SerializeObject(referenceSettingsManager), this);
+            string serialized = JsonConvert.SerializeObject(referenceSettingsManager, _serializerSettings);
+            JsonConvert.PopulateObject(serialized, this, _serializerSettings);
             IsSaved = referenceSettingsManager.IsSaved;
         }
 
@@ -86,7 +93,8 @@ namespace Tyrrrz.Settings
             Directory.CreateDirectory(Configuration.FullDirectoryPath);
 
             // Write file
-            File.WriteAllText(Configuration.FullFilePath, JsonConvert.SerializeObject(this, Formatting.Indented));
+            string serialized = JsonConvert.SerializeObject(this, _serializerSettings);
+            File.WriteAllText(Configuration.FullFilePath, serialized);
             IsSaved = true;
         }
 
@@ -112,7 +120,8 @@ namespace Tyrrrz.Settings
         public virtual void Load()
         {
             if (!File.Exists(Configuration.FullFilePath)) return;
-            JsonConvert.PopulateObject(File.ReadAllText(Configuration.FullFilePath), this);
+            string serialized = File.ReadAllText(Configuration.FullFilePath);
+            JsonConvert.PopulateObject(serialized, this, _serializerSettings);
             IsSaved = true;
         }
 
