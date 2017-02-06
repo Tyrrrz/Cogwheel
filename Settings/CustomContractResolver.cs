@@ -26,14 +26,20 @@ namespace Tyrrrz.Settings
             return a => method.Invoke(null, a);
         }
 
+        private static bool IsIgnored(Type declaringType, string propertyName)
+        {
+            var prop = declaringType.GetProperty(propertyName);
+            if (prop == null) return false;
+            return prop.GetCustomAttributes(typeof(IgnorePropertyAttribute), false).Any();
+        }
+
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
-            return
-                base.CreateProperties(type, memberSerialization)
+            return base.CreateProperties(type, memberSerialization)
                     // Not ignored
-                    .Where(p => !p.PropertyType.GetCustomAttributes(typeof(IgnorePropertyAttribute), false).Any())
-                    // Writable
-                    .Where(p => p.Writable)
+                    .Where(p => IsIgnored(type, p.UnderlyingName))
+                    // Writable and readable
+                    .Where(p => p.Writable && p.Readable)
                     .ToList();
         }
 

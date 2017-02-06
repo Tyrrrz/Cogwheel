@@ -19,7 +19,6 @@ namespace Tyrrrz.Settings
             ContractResolver = CustomContractResolver.Instance
         };
 
-        [IgnoreProperty]
         private bool _isSaved = true;
 
         /// <summary>
