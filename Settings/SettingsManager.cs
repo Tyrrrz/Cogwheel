@@ -14,6 +14,8 @@ namespace Tyrrrz.Settings
         private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
+            DefaultValueHandling = DefaultValueHandling.Include,
+            ObjectCreationHandling = ObjectCreationHandling.Replace,
             ContractResolver = CustomContractResolver.Instance
         };
 
