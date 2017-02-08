@@ -16,8 +16,18 @@
         LocalAppData,
 
         /// <summary>
+        /// The settings file is stored in %programdata% folder
+        /// </summary>
+        ProgramData,
+
+        /// <summary>
         /// The settings file is stored in My Documents folder
         /// </summary>
-        MyDocuments
+        MyDocuments,
+
+        /// <summary>
+        /// The settings file is stored in the same folder as this assembly
+        /// </summary>
+        Instance
     }
 }

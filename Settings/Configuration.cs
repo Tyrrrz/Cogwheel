@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 
 namespace Tyrrrz.Settings
 {
@@ -95,8 +96,15 @@ namespace Tyrrrz.Settings
                 case StorageSpace.LocalAppData:
                     root = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                     break;
+                case StorageSpace.ProgramData:
+                    root = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                    break;
                 case StorageSpace.MyDocuments:
                     root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                    break;
+                case StorageSpace.Instance:
+                    root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ??
+                           Environment.CurrentDirectory;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
