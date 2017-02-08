@@ -119,8 +119,15 @@ namespace Settings.Tests
             manager.Enum = TestEnum.Three;
             manager.Enum = TestEnum.Three;
 
+            // Change value to a new thing
+            manager.Enum = TestEnum.One;
+
+            // Change value again, to the same thing
+            manager.Enum = TestEnum.One;
+            manager.Enum = TestEnum.One;
+
             // Check if event was only raised once
-            Assert.AreEqual(1, triggerCount);
+            Assert.AreEqual(2, triggerCount);
         }
 
         [TestMethod]
