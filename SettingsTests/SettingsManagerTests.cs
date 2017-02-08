@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Settings.Tests.Mocks;
 
@@ -74,6 +75,55 @@ namespace Settings.Tests
         }
 
         [TestMethod]
+        public void PropertyChangedTest()
+        {
+            var manager = new TestSettingsManager();
+            string changedProperty = null;
+            manager.PropertyChanged += (sender, args) =>
+            {
+                // Ignore IsSaved changing
+                if (args.PropertyName == nameof(manager.IsSaved))
+                    return;
+
+                // Save the name of the changed property
+                changedProperty = args.PropertyName;
+            };
+
+            // Change value
+            manager.DateTime = DateTime.UtcNow;
+
+            // Check if event raised correctly
+            Assert.IsNotNull(changedProperty);
+            Assert.AreEqual(nameof(manager.DateTime), changedProperty);
+        }
+
+        [TestMethod]
+        public void PropertyChangedDistinctTest()
+        {
+            var manager = new TestSettingsManager();
+            int triggerCount = 0;
+            manager.PropertyChanged += (sender, args) =>
+            {
+                // Ignore IsSaved changing
+                if (args.PropertyName == nameof(manager.IsSaved))
+                    return;
+
+                // Count how many times event was raised
+                triggerCount++;
+            };
+
+            // Change value
+            manager.Enum = TestEnum.Three;
+
+            // Change value again, to the same thing
+            manager.Enum = TestEnum.Three;
+            manager.Enum = TestEnum.Three;
+
+            // Check if event was only raised once
+            Assert.AreEqual(1, triggerCount);
+        }
+
+        [TestMethod]
         public void SaveChangeLoadTest()
         {
             var manager = new TestSettingsManager();
@@ -96,6 +146,27 @@ namespace Settings.Tests
             Assert.AreEqual(13, manager.Int);
             Assert.AreEqual(3.14, manager.Double);
             Assert.AreEqual("Hello World", manager.Str);
+        }
+
+        [TestMethod]
+        public void IsSavedTest()
+        {
+            var manager = new TestSettingsManager();
+
+            // IsSaved should be true because its persistent (all values are default)
+            Assert.IsTrue(manager.IsSaved);
+
+            // Change values
+            manager.DateTime = DateTime.Now;
+
+            // IsSaved should be false because a value changed
+            Assert.IsFalse(manager.IsSaved);
+
+            // Save
+            manager.Save();
+
+            // IsSaved should be true because the settings are saved
+            Assert.IsTrue(manager.IsSaved);
         }
 
         [TestMethod]
@@ -136,12 +207,37 @@ namespace Settings.Tests
 
             // Save
             manager.Save();
-            Assert.IsTrue(File.Exists(manager.Configuration.FullFilePath));
 
             // Delete
             manager.Delete(true);
             Assert.IsFalse(File.Exists(manager.Configuration.FullFilePath));
             Assert.IsFalse(Directory.Exists(manager.Configuration.FullDirectoryPath));
+        }
+
+        [TestMethod]
+        public void SaveUpgradeLoadTest()
+        {
+            var oldManager = new TestSettingsManager();
+
+            // Set some values
+            oldManager.Double = 66.55;
+            oldManager.Class = new TestClass();
+            oldManager.Class.Long = 132;
+
+            // Save
+            oldManager.Save();
+
+            // Upgrade
+            var newManager = new TestSettingsManagerNewer();
+
+            // Load
+            newManager.Load();
+            
+            // Check values
+            Assert.AreEqual(66.55, newManager.Double);
+            Assert.IsNotNull(newManager.Class);
+            Assert.AreEqual(132, newManager.Class.Long);
+            Assert.AreEqual('Q', newManager.Char);
         }
     }
 }

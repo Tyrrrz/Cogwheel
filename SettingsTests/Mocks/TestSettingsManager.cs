@@ -5,13 +5,55 @@ namespace Settings.Tests.Mocks
 {
     public class TestSettingsManager : SettingsManager
     {
-        public int Int { get; set; } = 5;
-        public string Str { get; set; } = "Hello World";
-        public double Double { get; set; }
-        public DateTime DateTime { get; set; }
-        public TestEnum Enum { get; set; } = TestEnum.Two;
-        public TestClass Class { get; set; }
-        public ushort[] Array { get; set; } = {3, 14, 22};
+        private int _int = 5;
+        private string _str = "Hello World";
+        private double _double;
+        private DateTime _dateTime;
+        private TestEnum _enum = TestEnum.Two;
+        private TestClass _class;
+        private ushort[] _array = {3, 14, 22};
+
+        public int Int
+        {
+            get { return _int; }
+            set { Set(ref _int, value); }
+        }
+
+        public string Str
+        {
+            get { return _str; }
+            set { Set(ref _str, value); }
+        }
+
+        public double Double
+        {
+            get { return _double; }
+            set { Set(ref _double, value); }
+        }
+
+        public DateTime DateTime
+        {
+            get { return _dateTime; }
+            set { Set(ref _dateTime, value); }
+        }
+
+        public TestEnum Enum
+        {
+            get { return _enum; }
+            set { Set(ref _enum, value); }
+        }
+
+        public TestClass Class
+        {
+            get { return _class; }
+            set { Set(ref _class, value); }
+        }
+
+        public ushort[] Array
+        {
+            get { return _array; }
+            set { Set(ref _array, value); }
+        }
 
         public TestSettingsManager()
         {

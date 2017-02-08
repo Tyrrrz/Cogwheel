@@ -53,6 +53,7 @@
     <Compile Include="Mocks\TestClass.cs" />
     <Compile Include="Mocks\TestEnum.cs" />
     <Compile Include="Mocks\TestSettingsManager.cs" />
+    <Compile Include="Mocks\TestSettingsManagerNewer.cs" />
     <Compile Include="SettingsManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
