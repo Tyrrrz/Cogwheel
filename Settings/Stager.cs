@@ -87,9 +87,9 @@ namespace Tyrrrz.Settings
         }
 
         /// <summary>
-        /// Resets staged settings back to current
+        /// Resets staging settings back to current
         /// </summary>
-        public virtual void RevertStaged()
+        public virtual void RevertStaging()
         {
             Staging.CopyFrom(Current);
         }
