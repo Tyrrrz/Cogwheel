@@ -7,7 +7,7 @@ namespace Tyrrrz.Settings
     /// <summary>
     /// Configuration object for the SettingsManager class
     /// </summary>
-    public class Configuration
+    public sealed class Configuration
     {
         private StorageSpace _fileStorageSpace = StorageSpace.RoamingAppData;
         private string _subDirectoryPath = string.Empty;
@@ -78,7 +78,7 @@ namespace Tyrrrz.Settings
         }
 
         /// <inheritdoc />
-        public Configuration()
+        internal Configuration()
         {
             // Propagate defaults
             UpdateFullDirectoryPath();

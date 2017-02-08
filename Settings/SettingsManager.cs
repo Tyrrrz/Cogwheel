@@ -25,7 +25,7 @@ namespace Tyrrrz.Settings
         /// Configuration object
         /// </summary>
         [IgnoreProperty]
-        public Configuration Configuration { get; set; }
+        public Configuration Configuration { get; }
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
@@ -39,14 +39,6 @@ namespace Tyrrrz.Settings
                 // ReSharper disable once ExplicitCallerInfoArgument
                 base.Set(ref _isSaved, value, nameof(IsSaved));
             }
-        }
-
-        /// <summary>
-        /// Creates a settings manager object with custom configuration
-        /// </summary>
-        protected SettingsManager(Configuration configuration)
-        {
-            Configuration = configuration;
         }
 
         /// <summary>
