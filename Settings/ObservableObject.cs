@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Tyrrrz.Settings.Annotations;
 
 namespace Tyrrrz.Settings
 {
@@ -31,7 +30,6 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Raises the property changed event for given property
         /// </summary>
-        [NotifyPropertyChangedInvocator]
         protected virtual void RaisePropertyChanged(
 #if Net45
             [CallerMemberName]
@@ -44,7 +42,6 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Raises the property changed event for given property
         /// </summary>
-        [NotifyPropertyChangedInvocator]
         protected virtual void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
             string propertyName = ((propertyExpression?.Body as MemberExpression)?.Member as PropertyInfo)?.Name;
@@ -55,7 +52,6 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Sets a property to its new value and raises events as necessary
         /// </summary>
-        [NotifyPropertyChangedInvocator]
         protected virtual bool Set<T>(ref T field, T value,
 #if Net45
             [CallerMemberName]
