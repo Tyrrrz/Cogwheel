@@ -58,7 +58,7 @@ namespace Tyrrrz.Settings
 #if Net45
             [CallerMemberName]
 #endif
-        string propertyName = null)
+            string propertyName = null)
         {
             // ReSharper disable once ExplicitCallerInfoArgument
             bool changed = base.Set(ref field, value, propertyName);
@@ -74,6 +74,16 @@ namespace Tyrrrz.Settings
             string serialized = JsonConvert.SerializeObject(referenceSettingsManager, _serializerSettings);
             JsonConvert.PopulateObject(serialized, this, _serializerSettings);
             IsSaved = referenceSettingsManager.IsSaved;
+        }
+
+        /// <summary>
+        /// Clones this <see cref="SettingsManager"/> along with current values of its properties
+        /// </summary>
+        public object Clone()
+        {
+            var clone = (SettingsManager) Activator.CreateInstance(GetType());
+            clone.CopyFrom(this);
+            return clone;
         }
 
         /// <summary>
@@ -152,16 +162,6 @@ namespace Tyrrrz.Settings
                 Directory.Delete(Configuration.FullDirectoryPath, true);
             else if (File.Exists(Configuration.FullFilePath))
                 File.Delete(Configuration.FullFilePath);
-        }
-
-        /// <summary>
-        /// Clones this <see cref="SettingsManager"/> along with current values of its properties
-        /// </summary>
-        public object Clone()
-        {
-            var clone = (SettingsManager) Activator.CreateInstance(GetType());
-            clone.CopyFrom(this);
-            return clone;
         }
     }
 }
