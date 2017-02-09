@@ -126,12 +126,22 @@ namespace Settings.Tests
             manager.Enum = TestEnum.One;
             manager.Enum = TestEnum.One;
 
-            // Check if event was only raised once
+            // Check if event was only raised the minimum number of times
             Assert.AreEqual(2, triggerCount);
         }
 
         [TestMethod]
-        public void SaveChangeLoadTest()
+        public void SaveTest()
+        {
+            var manager = new TestSettingsManager();
+
+            // Save
+            manager.Save();
+            Assert.IsTrue(File.Exists(manager.Configuration.FullFilePath));
+        }
+
+        [TestMethod]
+        public void SaveChangesTest()
         {
             var manager = new TestSettingsManager();
 
@@ -141,7 +151,6 @@ namespace Settings.Tests
 
             // Save
             manager.Save();
-            Assert.IsTrue(File.Exists(manager.Configuration.FullFilePath));
 
             // Re-create
             manager = new TestSettingsManager();
@@ -160,13 +169,13 @@ namespace Settings.Tests
         {
             var manager = new TestSettingsManager();
 
-            // IsSaved should be true because its persistent (all values are default)
+            // IsSaved should be true because it's persistent (all values are default)
             Assert.IsTrue(manager.IsSaved);
 
             // Change values
             manager.DateTime = DateTime.Now;
 
-            // IsSaved should be false because a value changed
+            // IsSaved should be false because a value was changed
             Assert.IsFalse(manager.IsSaved);
 
             // Save
@@ -174,10 +183,34 @@ namespace Settings.Tests
 
             // IsSaved should be true because the settings are saved
             Assert.IsTrue(manager.IsSaved);
+
+            // Change values
+            manager.Int = 43;
+
+            // IsSaved should be false because a value was changed
+            Assert.IsFalse(manager.IsSaved);
+
+            // Load
+            manager.Load();
+
+            // IsSaved should be true because the settings are saved
+            Assert.IsTrue(manager.IsSaved);
+
+            // Change values
+            manager.Class = new TestClass();
+
+            // IsSaved should be false because a value was changed
+            Assert.IsFalse(manager.IsSaved);
+
+            // Reset
+            manager.Reset();
+
+            // IsSaved should be false because it's not persistent anymore
+            Assert.IsFalse(manager.IsSaved);
         }
 
         [TestMethod]
-        public void ChangeResetTest()
+        public void ResetTest()
         {
             var manager = new TestSettingsManager();
 
@@ -200,7 +233,6 @@ namespace Settings.Tests
 
             // Save
             manager.Save();
-            Assert.IsTrue(File.Exists(manager.Configuration.FullFilePath));
 
             // Delete
             manager.Delete();
