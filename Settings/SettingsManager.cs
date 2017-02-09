@@ -156,12 +156,28 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Deletes the settings file and, optionally, the containing directory
         /// </summary>
-        public virtual void Delete(bool deleteStorageDirectory = false)
+        public virtual void Delete(bool deleteParentDirectory = false)
         {
-            if (deleteStorageDirectory && Directory.Exists(Configuration.FullDirectoryPath))
-                Directory.Delete(Configuration.FullDirectoryPath, true);
-            else if (File.Exists(Configuration.FullFilePath))
-                File.Delete(Configuration.FullFilePath);
+            if (deleteParentDirectory)
+            {
+                try
+                {
+                    Directory.Delete(Configuration.FullDirectoryPath, true);
+                }
+                catch (DirectoryNotFoundException)
+                {
+                }
+            }
+            else
+            {
+                try
+                {
+                    File.Delete(Configuration.FullFilePath);
+                }
+                catch (FileNotFoundException)
+                {
+                }
+            }
         }
     }
 }
