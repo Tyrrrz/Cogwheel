@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Settings.Tests.Mocks;
 
@@ -122,7 +121,7 @@ namespace Settings.Tests
 
             // Save
             manager.Save();
-            Assert.IsTrue(File.Exists(manager.Configuration.FullFilePath));
+            Assert.IsTrue(FakeFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
         }
 
         [TestMethod]
@@ -221,7 +220,7 @@ namespace Settings.Tests
 
             // Delete
             manager.Delete();
-            Assert.IsFalse(File.Exists(manager.Configuration.FullFilePath));
+            Assert.IsFalse(FakeFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
         }
 
         [TestMethod]
@@ -234,8 +233,8 @@ namespace Settings.Tests
 
             // Delete
             manager.Delete(true);
-            Assert.IsFalse(File.Exists(manager.Configuration.FullFilePath));
-            Assert.IsFalse(Directory.Exists(manager.Configuration.FullDirectoryPath));
+            Assert.IsFalse(FakeFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
+            Assert.IsFalse(FakeFileSystemService.Instance.DirectoryExists(manager.Configuration.FullDirectoryPath));
         }
 
         [TestMethod]
