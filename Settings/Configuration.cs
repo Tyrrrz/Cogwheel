@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using Tyrrrz.Settings.Services;
 
 namespace Tyrrrz.Settings
 {
@@ -9,27 +7,53 @@ namespace Tyrrrz.Settings
     /// </summary>
     public sealed class Configuration
     {
-        private StorageSpace _fileStorageSpace = StorageSpace.RoamingAppData;
+        private ISerializationService _serializationService = JsonNetSerializationService.Instance;
+        private IFileSystemService _fileSystemService = DefaultFileSystemService.Instance;
+        private StorageSpace _storageSpace = StorageSpace.SyncedUserDomain;
         private string _subDirectoryPath = string.Empty;
         private string _fileName = "Settings.dat";
         private string _fullDirectoryPath;
         private string _fullFilePath;
 
         /// <summary>
-        /// Type of storage, where the settings file will be stored
+        /// Serialization abstraction
         /// </summary>
-        public StorageSpace FileStorageSpace
+        // ReSharper disable once ConvertToAutoProperty
+        public ISerializationService SerializationService
         {
-            get { return _fileStorageSpace; }
+            get { return _serializationService; }
+            set { _serializationService = value; }
+        }
+
+        /// <summary>
+        /// File system abstraction
+        /// </summary>
+        public IFileSystemService FileSystemService
+        {
+            get { return _fileSystemService; }
             set
             {
-                _fileStorageSpace = value;
+                _fileSystemService = value;
+                UpdateFullDirectoryPath();
+                UpdateFullFilePath();
+            }
+        }
+
+        /// <summary>
+        /// Type of storage, where the settings file will be stored
+        /// </summary>
+        public StorageSpace StorageSpace
+        {
+            get { return _storageSpace; }
+            set
+            {
+                _storageSpace = value;
                 UpdateFullDirectoryPath();
             }
         }
 
         /// <summary>
-        /// Subdirectory path for where the settings file is stored, relative to the selected <see cref="FileStorageSpace"/>
+        /// Subdirectory path for where the settings file is stored, relative to the selected <see cref="StorageSpace"/>
         /// </summary>
         public string SubDirectoryPath
         {
@@ -87,35 +111,13 @@ namespace Tyrrrz.Settings
 
         private void UpdateFullDirectoryPath()
         {
-            string root;
-            switch (FileStorageSpace)
-            {
-                case StorageSpace.RoamingAppData:
-                    root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    break;
-                case StorageSpace.LocalAppData:
-                    root = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                    break;
-                case StorageSpace.ProgramData:
-                    root = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                    break;
-                case StorageSpace.MyDocuments:
-                    root = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                    break;
-                case StorageSpace.Instance:
-                    root = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ??
-                           Environment.CurrentDirectory;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            FullDirectoryPath = Path.Combine(root, SubDirectoryPath);
+            string root = FileSystemService.GetDirectoryLocation(StorageSpace);
+            FullDirectoryPath = FileSystemService.CombinePath(root, SubDirectoryPath);
         }
 
         private void UpdateFullFilePath()
         {
-            FullFilePath = Path.Combine(FullDirectoryPath, FileName);
+            FullFilePath = FileSystemService.CombinePath(FullDirectoryPath, FileName);
         }
     }
 }

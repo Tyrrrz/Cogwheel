@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Settings.Tests.Mocks;
 using Tyrrrz.Settings;
 
@@ -8,25 +7,10 @@ namespace Settings.Tests
     [TestClass]
     public class StagerTests
     {
-        [TestCleanup]
-        public void Cleanup()
-        {
-            var manager = new TestSettingsManager();
-
-            // Try to delete everything
-            try
-            {
-                Directory.Delete(manager.Configuration.FullDirectoryPath, true);
-            }
-            catch (DirectoryNotFoundException)
-            {
-            }
-        }
-
         [TestMethod]
         public void InstantiateTest()
         {
-            var stager = new Stager<TestSettingsManager>();
+            var stager = new Stager<FakeSettingsManager>();
 
             // Make sure both instances exist and are not the same
             Assert.IsNotNull(stager.Current);
@@ -37,7 +21,7 @@ namespace Settings.Tests
         [TestMethod]
         public void InstantiateWithFactoryTest()
         {
-            var stager = new Stager<TestSettingsManager>(() => new TestSettingsManager {Int = 1337});
+            var stager = new Stager<FakeSettingsManager>(() => new FakeSettingsManager {Int = 1337});
 
             // Make sure both instances exist and are not the same
             Assert.IsNotNull(stager.Current);
@@ -52,7 +36,7 @@ namespace Settings.Tests
         [TestMethod]
         public void SaveSyncTest()
         {
-            var stager = new Stager<TestSettingsManager>();
+            var stager = new Stager<FakeSettingsManager>();
 
             // Should be in sync
             Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
@@ -73,7 +57,7 @@ namespace Settings.Tests
         [TestMethod]
         public void LoadSyncTest()
         {
-            var stager = new Stager<TestSettingsManager>();
+            var stager = new Stager<FakeSettingsManager>();
 
             // Save
             stager.Save();
@@ -97,7 +81,7 @@ namespace Settings.Tests
         [TestMethod]
         public void RevertStagingSyncTest()
         {
-            var stager = new Stager<TestSettingsManager>();
+            var stager = new Stager<FakeSettingsManager>();
 
             // Should be in sync
             Assert.AreEqual(stager.Staging.Str, stager.Current.Str);

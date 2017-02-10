@@ -4,11 +4,11 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Tyrrrz.Settings
+namespace Tyrrrz.Settings.Services
 {
-    internal sealed class CustomContractResolver : DefaultContractResolver
+    internal sealed class CustomJsonNetContractResolver : DefaultContractResolver
     {
-        public static CustomContractResolver Instance { get; } = new CustomContractResolver();
+        public static CustomJsonNetContractResolver Instance { get; } = new CustomJsonNetContractResolver();
 
         private static bool IsIgnored(Type declaringType, string propertyName)
         {

@@ -6,27 +6,25 @@
     public enum StorageSpace
     {
         /// <summary>
-        /// The settings file is stored in %appdata% folder
+        /// The settings file is stored in synchronized user domain.
+        /// Roaming Application Data on Windows.
         /// </summary>
-        RoamingAppData,
+        SyncedUserDomain,
 
         /// <summary>
-        /// The settings file is stored in %localappdata% folder
+        /// The settings file is stored in unsynchronized user domain.
+        /// Local Application Data on Windows.
         /// </summary>
-        LocalAppData,
+        UserDomain,
 
         /// <summary>
-        /// The settings file is stored in %programdata% folder
+        /// The settings file is stored in machine domain.
+        /// Program Data on Windows.
         /// </summary>
-        ProgramData,
+        MachineDomain,
 
         /// <summary>
-        /// The settings file is stored in My Documents folder
-        /// </summary>
-        MyDocuments,
-
-        /// <summary>
-        /// The settings file is stored in the same folder as this assembly
+        /// The settings file is stored in the current directory.
         /// </summary>
         Instance
     }

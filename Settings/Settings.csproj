@@ -53,8 +53,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomContractResolver.cs" />
+    <Compile Include="Services\CustomJsonNetContractResolver.cs" />
+    <Compile Include="Services\DefaultFileSystemService.cs" />
+    <Compile Include="Services\IFileSystemService.cs" />
     <Compile Include="IgnorePropertyAttribute.cs" />
+    <Compile Include="Services\ISerializationService.cs" />
+    <Compile Include="Services\JsonNetSerializationService.cs" />
     <Compile Include="ObservableObject.cs" />
     <Compile Include="SettingsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

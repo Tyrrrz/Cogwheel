@@ -8,25 +8,10 @@ namespace Settings.Tests
     [TestClass]
     public class SettingsManagerTests
     {
-        [TestCleanup]
-        public void Cleanup()
-        {
-            var manager = new TestSettingsManager();
-
-            // Try to delete everything
-            try
-            {
-                Directory.Delete(manager.Configuration.FullDirectoryPath, true);
-            }
-            catch (DirectoryNotFoundException)
-            {
-            }
-        }
-
         [TestMethod]
         public void InstantiateTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Check that configuration properties are set
             Assert.IsNotNull(manager.Configuration);
@@ -39,11 +24,11 @@ namespace Settings.Tests
         [TestMethod]
         public void CopyFromTest()
         {
-            var manager1 = new TestSettingsManager();
-            var manager2 = new TestSettingsManager();
+            var manager1 = new FakeSettingsManager();
+            var manager2 = new FakeSettingsManager();
 
             // Change stuff in manager2
-            manager2.Class = new TestClass();
+            manager2.Class = new FakeClass();
             manager2.Class.Decimal = 123123;
 
             // Copy
@@ -57,13 +42,13 @@ namespace Settings.Tests
         [TestMethod]
         public void CloneTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Change stuff
             manager.Array = new ushort[] {99, 5, 6};
 
             // Clone
-            var clone = manager.Clone() as TestSettingsManager;
+            var clone = manager.Clone() as FakeSettingsManager;
             Assert.IsNotNull(clone);
 
             // Check values
@@ -77,7 +62,7 @@ namespace Settings.Tests
         [TestMethod]
         public void PropertyChangedTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
             string changedProperty = null;
             manager.PropertyChanged += (sender, args) =>
             {
@@ -100,7 +85,7 @@ namespace Settings.Tests
         [TestMethod]
         public void PropertyChangedDistinctTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
             int triggerCount = 0;
             manager.PropertyChanged += (sender, args) =>
             {
@@ -113,18 +98,18 @@ namespace Settings.Tests
             };
 
             // Change value
-            manager.Enum = TestEnum.Three;
+            manager.Enum = FakeEnum.Three;
 
             // Change value again, to the same thing
-            manager.Enum = TestEnum.Three;
-            manager.Enum = TestEnum.Three;
+            manager.Enum = FakeEnum.Three;
+            manager.Enum = FakeEnum.Three;
 
             // Change value to a new thing
-            manager.Enum = TestEnum.One;
+            manager.Enum = FakeEnum.One;
 
             // Change value again, to the same thing
-            manager.Enum = TestEnum.One;
-            manager.Enum = TestEnum.One;
+            manager.Enum = FakeEnum.One;
+            manager.Enum = FakeEnum.One;
 
             // Check if event was only raised the minimum number of times
             Assert.AreEqual(2, triggerCount);
@@ -133,7 +118,7 @@ namespace Settings.Tests
         [TestMethod]
         public void SaveTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Save
             manager.Save();
@@ -143,7 +128,7 @@ namespace Settings.Tests
         [TestMethod]
         public void SaveChangesTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Change some values
             manager.Int = 13;
@@ -153,7 +138,7 @@ namespace Settings.Tests
             manager.Save();
 
             // Re-create
-            manager = new TestSettingsManager();
+            manager = new FakeSettingsManager();
 
             // Load
             manager.Load();
@@ -167,7 +152,7 @@ namespace Settings.Tests
         [TestMethod]
         public void IsSavedTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // IsSaved should be true because it's persistent (all values are default)
             Assert.IsTrue(manager.IsSaved);
@@ -197,7 +182,7 @@ namespace Settings.Tests
             Assert.IsTrue(manager.IsSaved);
 
             // Change values
-            manager.Class = new TestClass();
+            manager.Class = new FakeClass();
 
             // IsSaved should be false because a value was changed
             Assert.IsFalse(manager.IsSaved);
@@ -212,24 +197,24 @@ namespace Settings.Tests
         [TestMethod]
         public void ResetTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Change some values
             manager.Str = "Test";
-            manager.Enum = TestEnum.One;
+            manager.Enum = FakeEnum.One;
 
             // Reset
             manager.Reset();
 
             // Check values
             Assert.AreEqual("Hello World", manager.Str);
-            Assert.AreEqual(TestEnum.Two, manager.Enum);
+            Assert.AreEqual(FakeEnum.Two, manager.Enum);
         }
 
         [TestMethod]
         public void DeleteTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Save
             manager.Save();
@@ -242,7 +227,7 @@ namespace Settings.Tests
         [TestMethod]
         public void DeleteWithDirTest()
         {
-            var manager = new TestSettingsManager();
+            var manager = new FakeSettingsManager();
 
             // Save
             manager.Save();
@@ -256,18 +241,18 @@ namespace Settings.Tests
         [TestMethod]
         public void SaveUpgradeLoadTest()
         {
-            var oldManager = new TestSettingsManager();
+            var oldManager = new FakeSettingsManager();
 
             // Set some values
             oldManager.Double = 66.55;
-            oldManager.Class = new TestClass();
+            oldManager.Class = new FakeClass();
             oldManager.Class.Long = 132;
 
             // Save
             oldManager.Save();
 
             // Upgrade
-            var newManager = new TestSettingsManagerNewer();
+            var newManager = new FakeSettingsManagerNewer();
 
             // Load
             newManager.Load();

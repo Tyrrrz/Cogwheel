@@ -36,6 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.IO.Abstractions, Version=2.0.0.140, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Abstractions.2.0.0.140\lib\net40\System.IO.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -52,10 +56,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Mocks\TestClass.cs" />
-    <Compile Include="Mocks\TestEnum.cs" />
-    <Compile Include="Mocks\TestSettingsManager.cs" />
-    <Compile Include="Mocks\TestSettingsManagerNewer.cs" />
+    <Compile Include="Mocks\FakeClass.cs" />
+    <Compile Include="Mocks\FakeEnum.cs" />
+    <Compile Include="Mocks\FakeFileSystemService.cs" />
+    <Compile Include="Mocks\FakeSettingsManager.cs" />
+    <Compile Include="Mocks\FakeSettingsManagerNewer.cs" />
     <Compile Include="SettingsManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StagerTests.cs" />
@@ -65,6 +70,9 @@
       <Project>{c2bcaf75-bf56-43ac-b349-f3000784e659}</Project>
       <Name>Settings</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

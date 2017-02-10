@@ -3,14 +3,14 @@ using Tyrrrz.Settings;
 
 namespace Settings.Tests.Mocks
 {
-    public class TestSettingsManager : SettingsManager
+    public class FakeSettingsManager : SettingsManager
     {
         private int _int = 5;
         private string _str = "Hello World";
         private double _double;
         private DateTime _dateTime;
-        private TestEnum _enum = TestEnum.Two;
-        private TestClass _class;
+        private FakeEnum _enum = FakeEnum.Two;
+        private FakeClass _class;
         private ushort[] _array = {3, 14, 22};
 
         public int Int
@@ -37,13 +37,13 @@ namespace Settings.Tests.Mocks
             set { Set(ref _dateTime, value); }
         }
 
-        public TestEnum Enum
+        public FakeEnum Enum
         {
             get { return _enum; }
             set { Set(ref _enum, value); }
         }
 
-        public TestClass Class
+        public FakeClass Class
         {
             get { return _class; }
             set { Set(ref _class, value); }
@@ -55,9 +55,10 @@ namespace Settings.Tests.Mocks
             set { Set(ref _array, value); }
         }
 
-        public TestSettingsManager()
+        public FakeSettingsManager()
         {
-            Configuration.FileStorageSpace = StorageSpace.Instance;
+            Configuration.FileSystemService = FakeFileSystemService.Instance;
+            Configuration.StorageSpace = StorageSpace.Instance;
             Configuration.SubDirectoryPath = "test";
             Configuration.FileName = "test.dat";
         }

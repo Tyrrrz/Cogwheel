@@ -1,6 +1,6 @@
 ﻿namespace Settings.Tests.Mocks
 {
-    public enum TestEnum
+    public enum FakeEnum
     {
         One, Two, Three
     }

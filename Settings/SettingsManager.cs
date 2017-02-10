@@ -1,8 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Newtonsoft.Json;
+using Tyrrrz.Settings.Services;
 
 namespace Tyrrrz.Settings
 {
@@ -11,14 +10,6 @@ namespace Tyrrrz.Settings
     /// </summary>
     public abstract class SettingsManager : ObservableObject, ICloneable
     {
-        private readonly JsonSerializerSettings _serializerSettings = new JsonSerializerSettings
-        {
-            Formatting = Formatting.Indented,
-            DefaultValueHandling = DefaultValueHandling.Include,
-            ObjectCreationHandling = ObjectCreationHandling.Replace,
-            ContractResolver = CustomContractResolver.Instance
-        };
-
         private bool _isSaved = true;
 
         /// <summary>
@@ -26,6 +17,18 @@ namespace Tyrrrz.Settings
         /// </summary>
         [IgnoreProperty]
         public Configuration Configuration { get; }
+
+        /// <summary>
+        /// Shortcut for serializer
+        /// </summary>
+        [IgnoreProperty]
+        private ISerializationService SerializationService => Configuration.SerializationService;
+
+        /// <summary>
+        /// Shortcut for file system handler
+        /// </summary>
+        [IgnoreProperty]
+        private IFileSystemService FileSystemService => Configuration.FileSystemService;
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
@@ -71,8 +74,8 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void CopyFrom(SettingsManager referenceSettingsManager)
         {
-            string serialized = JsonConvert.SerializeObject(referenceSettingsManager, _serializerSettings);
-            JsonConvert.PopulateObject(serialized, this, _serializerSettings);
+            var serialized = SerializationService.Serialize(referenceSettingsManager);
+            SerializationService.Populate(serialized, this);
             IsSaved = referenceSettingsManager.IsSaved;
         }
 
@@ -92,11 +95,11 @@ namespace Tyrrrz.Settings
         public virtual void Save()
         {
             // Create the directory
-            Directory.CreateDirectory(Configuration.FullDirectoryPath);
+            FileSystemService.CreateDirectory(Configuration.FullDirectoryPath);
 
             // Write file
-            string serialized = JsonConvert.SerializeObject(this, _serializerSettings);
-            File.WriteAllText(Configuration.FullFilePath, serialized);
+            var serialized = SerializationService.Serialize(this);
+            FileSystemService.FileWriteAllBytes(Configuration.FullFilePath, serialized);
             IsSaved = true;
         }
 
@@ -121,9 +124,9 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void Load()
         {
-            if (!File.Exists(Configuration.FullFilePath)) return;
-            string serialized = File.ReadAllText(Configuration.FullFilePath);
-            JsonConvert.PopulateObject(serialized, this, _serializerSettings);
+            if (!FileSystemService.FileExists(Configuration.FullFilePath)) return;
+            var serialized = FileSystemService.FileReadAllBytes(Configuration.FullFilePath);
+            SerializationService.Populate(serialized, this);
             IsSaved = true;
         }
 
@@ -160,23 +163,11 @@ namespace Tyrrrz.Settings
         {
             if (deleteParentDirectory)
             {
-                try
-                {
-                    Directory.Delete(Configuration.FullDirectoryPath, true);
-                }
-                catch (DirectoryNotFoundException)
-                {
-                }
+                FileSystemService.DeleteDirectory(Configuration.FullDirectoryPath, true);
             }
             else
             {
-                try
-                {
-                    File.Delete(Configuration.FullFilePath);
-                }
-                catch (FileNotFoundException)
-                {
-                }
+                FileSystemService.DeleteFile(Configuration.FullFilePath);
             }
         }
     }

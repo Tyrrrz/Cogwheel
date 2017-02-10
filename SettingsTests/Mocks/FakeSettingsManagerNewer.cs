@@ -1,6 +1,6 @@
 ﻿namespace Settings.Tests.Mocks
 {
-    public class TestSettingsManagerNewer : TestSettingsManager
+    public class FakeSettingsManagerNewer : FakeSettingsManager
     {
         private char _char = 'Q';
 
