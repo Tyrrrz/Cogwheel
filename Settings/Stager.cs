@@ -28,12 +28,12 @@ namespace Tyrrrz.Settings
         }
 
         /// <summary>
-        /// Creates a stager for a settings manager, using a factory delegate
+        /// Creates a stager for a settings manager using predefined managers
         /// </summary>
-        public Stager(Func<T> settingsFactory)
+        public Stager(SettingsManager current, SettingsManager staging)
         {
-            Current = settingsFactory();
-            Staging = settingsFactory();
+            Current = (T) current;
+            Staging = (T) staging;
         }
 
         /// <summary>

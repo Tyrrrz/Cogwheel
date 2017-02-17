@@ -21,7 +21,9 @@ namespace Settings.Tests
         [TestMethod]
         public void InstantiateWithFactoryTest()
         {
-            var stager = new Stager<FakeSettingsManager>(() => new FakeSettingsManager {Int = 1337});
+            var stager = new Stager<FakeSettingsManager>(
+                new FakeSettingsManager {Int = 1337},
+                new FakeSettingsManager {Int = 6969});
 
             // Make sure both instances exist and are not the same
             Assert.IsNotNull(stager.Current);
@@ -30,7 +32,7 @@ namespace Settings.Tests
 
             // Check if factory worked
             Assert.AreEqual(1337, stager.Current.Int);
-            Assert.AreEqual(1337, stager.Staging.Int);
+            Assert.AreEqual(6969, stager.Staging.Int);
         }
 
         [TestMethod]
