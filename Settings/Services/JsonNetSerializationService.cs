@@ -22,19 +22,19 @@ namespace Tyrrrz.Settings.Services
         public static JsonNetSerializationService Instance { get; } = new JsonNetSerializationService();
 
         /// <inheritdoc />
-        public byte[] Serialize(object obj)
+        public virtual byte[] Serialize(object obj)
         {
             return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(obj, SerializerSettings));
         }
 
         /// <inheritdoc />
-        public T Deserialize<T>(byte[] data)
+        public virtual T Deserialize<T>(byte[] data)
         {
             return JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(data), SerializerSettings);
         }
 
         /// <inheritdoc />
-        public void Populate(byte[] data, object obj)
+        public virtual void Populate(byte[] data, object obj)
         {
             JsonConvert.PopulateObject(Encoding.UTF8.GetString(data), obj, SerializerSettings);
         }

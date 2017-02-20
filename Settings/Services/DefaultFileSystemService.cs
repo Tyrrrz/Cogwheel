@@ -14,13 +14,13 @@ namespace Tyrrrz.Settings.Services
         public static DefaultFileSystemService Instance { get; } = new DefaultFileSystemService();
 
         /// <inheritdoc />
-        public void CreateDirectory(string dirPath)
+        public virtual void CreateDirectory(string dirPath)
         {
             Directory.CreateDirectory(dirPath);
         }
 
         /// <inheritdoc />
-        public string GetDirectoryLocation(StorageSpace storageSpace)
+        public virtual string GetDirectoryLocation(StorageSpace storageSpace)
         {
             switch (storageSpace)
             {
@@ -38,13 +38,13 @@ namespace Tyrrrz.Settings.Services
         }
 
         /// <inheritdoc />
-        public bool DirectoryExists(string dirPath)
+        public virtual bool DirectoryExists(string dirPath)
         {
             return Directory.Exists(dirPath);
         }
 
         /// <inheritdoc />
-        public void DeleteDirectory(string dirPath, bool recursive)
+        public virtual void DeleteDirectory(string dirPath, bool recursive)
         {
             try
             {
@@ -56,25 +56,25 @@ namespace Tyrrrz.Settings.Services
         }
 
         /// <inheritdoc />
-        public byte[] FileReadAllBytes(string filePath)
+        public virtual byte[] FileReadAllBytes(string filePath)
         {
             return File.ReadAllBytes(filePath);
         }
 
         /// <inheritdoc />
-        public void FileWriteAllBytes(string filePath, byte[] data)
+        public virtual void FileWriteAllBytes(string filePath, byte[] data)
         {
             File.WriteAllBytes(filePath, data);
         }
 
         /// <inheritdoc />
-        public bool FileExists(string filePath)
+        public virtual bool FileExists(string filePath)
         {
             return File.Exists(filePath);
         }
 
         /// <inheritdoc />
-        public void DeleteFile(string filePath)
+        public virtual void DeleteFile(string filePath)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace Tyrrrz.Settings.Services
         }
 
         /// <inheritdoc />
-        public string CombinePath(params string[] paths)
+        public virtual string CombinePath(params string[] paths)
         {
             return Path.Combine(paths);
         }
