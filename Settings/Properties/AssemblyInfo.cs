@@ -7,11 +7,12 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Tyrrrz Settings Library")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Settings Manager")]
-[assembly: AssemblyCopyright("Copyright © Tyrrrz 2015-2017")]
+[assembly: AssemblyCompany("Tyrrrz")]
+[assembly: AssemblyProduct("Tyrrrz Settings Library")]
+[assembly: AssemblyCopyright("Copyright © Alexey 'Tyrrrz' Golub 2015-2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -32,3 +33,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.2.*")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
