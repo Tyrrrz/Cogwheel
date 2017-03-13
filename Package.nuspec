@@ -5,11 +5,11 @@
     <version>1.2.0</version>
     <authors>Tyrrrz</authors>
     <owners>Tyrrrz</owners>
-    <licenseUrl>https://github.com/Tyrrrz/Settings/blob/master/License.txt</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/Tyrrrz/Settings/master/License.txt</licenseUrl>
     <projectUrl>https://github.com/Tyrrrz/Settings</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Settings bootstrap for .NET applications</description>
-    <copyright>Copyright (C) Alexey Golub 2015-2017</copyright>
+    <copyright>Copyright (C) Alexey 'Tyrrrz' Golub 2015-2017</copyright>
     <tags></tags>
 
     <frameworkAssemblies>
