@@ -6,8 +6,8 @@
     <ProjectGuid>{6B12175C-7F3A-4047-844A-091E76164709}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Settings.Tests</RootNamespace>
-    <AssemblyName>SettingsTests</AssemblyName>
+    <RootNamespace>Tyrrrz.Settings.Tests</RootNamespace>
+    <AssemblyName>Tyrrrz.Settings.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

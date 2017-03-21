@@ -1,7 +1,6 @@
 ﻿using System;
-using Tyrrrz.Settings;
 
-namespace Settings.Tests.Mocks
+namespace Tyrrrz.Settings.Tests.Mocks
 {
     public class FakeSettingsManager : SettingsManager
     {

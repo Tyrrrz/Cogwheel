@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Tyrrrz.Settings;
 using Tyrrrz.Settings.Services;
 
-namespace Settings.Tests.Mocks
+namespace Tyrrrz.Settings.Tests.Mocks
 {
     public class FakeFileSystemService : IFileSystemService
     {
