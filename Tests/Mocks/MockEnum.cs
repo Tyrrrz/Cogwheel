@@ -1,6 +1,6 @@
 ﻿namespace Tyrrrz.Settings.Tests.Mocks
 {
-    public enum FakeEnum
+    public enum MockEnum
     {
         One, Two, Three
     }

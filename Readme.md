@@ -14,9 +14,9 @@ My settings library.
 - Offers a staging system, which exposes two instances of settings: one (stable) for application and another (dirty) for making changes
 - More...
 
-**Download and install:**
+**Download:**
 
-This library is distributed as a [nuget package](https://www.nuget.org/packages/Tyrrrz.Settings): `Install-Package Tyrrrz.Settings`
+- Using nuget: `Install-Package Tyrrrz.Settings`
 
 **Dependencies:**
 

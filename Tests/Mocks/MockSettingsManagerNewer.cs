@@ -1,6 +1,6 @@
 ﻿namespace Tyrrrz.Settings.Tests.Mocks
 {
-    public class FakeSettingsManagerNewer : FakeSettingsManager
+    public class MockSettingsManagerNewer : MockSettingsManager
     {
         private char _char = 'Q';
 

@@ -10,7 +10,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void InstantiateTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Check that configuration properties are set
             Assert.IsNotNull(manager.Configuration);
@@ -23,11 +23,11 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void CopyFromTest()
         {
-            var manager1 = new FakeSettingsManager();
-            var manager2 = new FakeSettingsManager();
+            var manager1 = new MockSettingsManager();
+            var manager2 = new MockSettingsManager();
 
             // Change stuff in manager2
-            manager2.Class = new FakeClass();
+            manager2.Class = new MockClass();
             manager2.Class.Decimal = 123123;
 
             // Copy
@@ -41,13 +41,13 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void CloneTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Change stuff
             manager.Array = new ushort[] {99, 5, 6};
 
             // Clone
-            var clone = manager.Clone() as FakeSettingsManager;
+            var clone = manager.Clone() as MockSettingsManager;
             Assert.IsNotNull(clone);
 
             // Check values
@@ -61,7 +61,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void PropertyChangedTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
             string changedProperty = null;
             manager.PropertyChanged += (sender, args) =>
             {
@@ -84,7 +84,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void PropertyChangedDistinctTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
             int triggerCount = 0;
             manager.PropertyChanged += (sender, args) =>
             {
@@ -97,18 +97,18 @@ namespace Tyrrrz.Settings.Tests
             };
 
             // Change value
-            manager.Enum = FakeEnum.Three;
+            manager.Enum = MockEnum.Three;
 
             // Change value again, to the same thing
-            manager.Enum = FakeEnum.Three;
-            manager.Enum = FakeEnum.Three;
+            manager.Enum = MockEnum.Three;
+            manager.Enum = MockEnum.Three;
 
             // Change value to a new thing
-            manager.Enum = FakeEnum.One;
+            manager.Enum = MockEnum.One;
 
             // Change value again, to the same thing
-            manager.Enum = FakeEnum.One;
-            manager.Enum = FakeEnum.One;
+            manager.Enum = MockEnum.One;
+            manager.Enum = MockEnum.One;
 
             // Check if event was only raised the minimum number of times
             Assert.AreEqual(2, triggerCount);
@@ -117,17 +117,17 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void SaveTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Save
             manager.Save();
-            Assert.IsTrue(FakeFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
+            Assert.IsTrue(MockFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
         }
 
         [TestMethod]
         public void SaveChangesTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Change some values
             manager.Int = 13;
@@ -137,7 +137,7 @@ namespace Tyrrrz.Settings.Tests
             manager.Save();
 
             // Re-create
-            manager = new FakeSettingsManager();
+            manager = new MockSettingsManager();
 
             // Load
             manager.Load();
@@ -151,7 +151,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void IsSavedTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // IsSaved should be true because it's persistent (all values are default)
             Assert.IsTrue(manager.IsSaved);
@@ -181,7 +181,7 @@ namespace Tyrrrz.Settings.Tests
             Assert.IsTrue(manager.IsSaved);
 
             // Change values
-            manager.Class = new FakeClass();
+            manager.Class = new MockClass();
 
             // IsSaved should be false because a value was changed
             Assert.IsFalse(manager.IsSaved);
@@ -196,62 +196,62 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void ResetTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Change some values
             manager.Str = "Test";
-            manager.Enum = FakeEnum.One;
+            manager.Enum = MockEnum.One;
 
             // Reset
             manager.Reset();
 
             // Check values
             Assert.AreEqual("Hello World", manager.Str);
-            Assert.AreEqual(FakeEnum.Two, manager.Enum);
+            Assert.AreEqual(MockEnum.Two, manager.Enum);
         }
 
         [TestMethod]
         public void DeleteTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Save
             manager.Save();
 
             // Delete
             manager.Delete();
-            Assert.IsFalse(FakeFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
+            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
         }
 
         [TestMethod]
         public void DeleteWithDirTest()
         {
-            var manager = new FakeSettingsManager();
+            var manager = new MockSettingsManager();
 
             // Save
             manager.Save();
 
             // Delete
             manager.Delete(true);
-            Assert.IsFalse(FakeFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
-            Assert.IsFalse(FakeFileSystemService.Instance.DirectoryExists(manager.Configuration.FullDirectoryPath));
+            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
+            Assert.IsFalse(MockFileSystemService.Instance.DirectoryExists(manager.Configuration.FullDirectoryPath));
         }
 
         [TestMethod]
         public void SaveUpgradeLoadTest()
         {
-            var oldManager = new FakeSettingsManager();
+            var oldManager = new MockSettingsManager();
 
             // Set some values
             oldManager.Double = 66.55;
-            oldManager.Class = new FakeClass();
+            oldManager.Class = new MockClass();
             oldManager.Class.Long = 132;
 
             // Save
             oldManager.Save();
 
             // Upgrade
-            var newManager = new FakeSettingsManagerNewer();
+            var newManager = new MockSettingsManagerNewer();
 
             // Load
             newManager.Load();

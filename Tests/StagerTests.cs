@@ -9,7 +9,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void InstantiateTest()
         {
-            var stager = new Stager<FakeSettingsManager>();
+            var stager = new Stager<MockSettingsManager>();
 
             // Make sure both instances exist and are not the same
             Assert.IsNotNull(stager.Current);
@@ -20,9 +20,9 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void InstantiateWithFactoryTest()
         {
-            var stager = new Stager<FakeSettingsManager>(
-                new FakeSettingsManager {Int = 1337},
-                new FakeSettingsManager {Int = 6969});
+            var stager = new Stager<MockSettingsManager>(
+                new MockSettingsManager {Int = 1337},
+                new MockSettingsManager {Int = 6969});
 
             // Make sure both instances exist and are not the same
             Assert.IsNotNull(stager.Current);
@@ -37,7 +37,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void SaveSyncTest()
         {
-            var stager = new Stager<FakeSettingsManager>();
+            var stager = new Stager<MockSettingsManager>();
 
             // Should be in sync
             Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
@@ -58,7 +58,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void LoadSyncTest()
         {
-            var stager = new Stager<FakeSettingsManager>();
+            var stager = new Stager<MockSettingsManager>();
 
             // Save
             stager.Save();
@@ -82,7 +82,7 @@ namespace Tyrrrz.Settings.Tests
         [TestMethod]
         public void RevertStagingSyncTest()
         {
-            var stager = new Stager<FakeSettingsManager>();
+            var stager = new Stager<MockSettingsManager>();
 
             // Should be in sync
             Assert.AreEqual(stager.Staging.Str, stager.Current.Str);

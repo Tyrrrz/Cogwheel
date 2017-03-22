@@ -5,9 +5,9 @@ using Tyrrrz.Settings.Services;
 
 namespace Tyrrrz.Settings.Tests.Mocks
 {
-    public class FakeFileSystemService : IFileSystemService
+    public class MockFileSystemService : IFileSystemService
     {
-        public static FakeFileSystemService Instance { get; } = new FakeFileSystemService();
+        public static MockFileSystemService Instance { get; } = new MockFileSystemService();
 
         private readonly List<string> _dirs = new List<string>();
         private readonly Dictionary<string, byte[]> _files = new Dictionary<string, byte[]>();

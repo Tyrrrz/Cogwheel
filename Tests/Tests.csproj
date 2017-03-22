@@ -52,11 +52,11 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Mocks\FakeClass.cs" />
-    <Compile Include="Mocks\FakeEnum.cs" />
-    <Compile Include="Mocks\FakeFileSystemService.cs" />
-    <Compile Include="Mocks\FakeSettingsManager.cs" />
-    <Compile Include="Mocks\FakeSettingsManagerNewer.cs" />
+    <Compile Include="Mocks\MockClass.cs" />
+    <Compile Include="Mocks\MockEnum.cs" />
+    <Compile Include="Mocks\MockFileSystemService.cs" />
+    <Compile Include="Mocks\MockSettingsManager.cs" />
+    <Compile Include="Mocks\MockSettingsManagerNewer.cs" />
     <Compile Include="SettingsManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StagerTests.cs" />

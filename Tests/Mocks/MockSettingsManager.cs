@@ -2,14 +2,14 @@
 
 namespace Tyrrrz.Settings.Tests.Mocks
 {
-    public class FakeSettingsManager : SettingsManager
+    public class MockSettingsManager : SettingsManager
     {
         private int _int = 5;
         private string _str = "Hello World";
         private double _double;
         private DateTime _dateTime;
-        private FakeEnum _enum = FakeEnum.Two;
-        private FakeClass _class;
+        private MockEnum _enum = MockEnum.Two;
+        private MockClass _class;
         private ushort[] _array = {3, 14, 22};
 
         public int Int
@@ -36,13 +36,13 @@ namespace Tyrrrz.Settings.Tests.Mocks
             set { Set(ref _dateTime, value); }
         }
 
-        public FakeEnum Enum
+        public MockEnum Enum
         {
             get { return _enum; }
             set { Set(ref _enum, value); }
         }
 
-        public FakeClass Class
+        public MockClass Class
         {
             get { return _class; }
             set { Set(ref _class, value); }
@@ -54,9 +54,9 @@ namespace Tyrrrz.Settings.Tests.Mocks
             set { Set(ref _array, value); }
         }
 
-        public FakeSettingsManager()
+        public MockSettingsManager()
         {
-            Configuration.FileSystemService = FakeFileSystemService.Instance;
+            Configuration.FileSystemService = MockFileSystemService.Instance;
             Configuration.StorageSpace = StorageSpace.Instance;
             Configuration.SubDirectoryPath = "test";
             Configuration.FileName = "test.dat";
