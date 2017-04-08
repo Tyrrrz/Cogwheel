@@ -32,6 +32,11 @@ namespace Tyrrrz.Settings
         /// </summary>
         public Stager(SettingsManager current, SettingsManager staging)
         {
+            if (current == null)
+                throw new ArgumentNullException(nameof(current));
+            if (staging == null)
+                throw new ArgumentNullException(nameof(staging));
+
             Current = (T) current;
             Staging = (T) staging;
         }

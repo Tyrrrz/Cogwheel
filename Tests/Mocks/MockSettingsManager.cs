@@ -1,4 +1,5 @@
 ﻿using System;
+using Tyrrrz.Settings.Services;
 
 namespace Tyrrrz.Settings.Tests.Mocks
 {
@@ -55,8 +56,8 @@ namespace Tyrrrz.Settings.Tests.Mocks
         }
 
         public MockSettingsManager()
+            : base(JsonNetSerializationService.Instance, MockFileSystemService.Instance)
         {
-            Configuration.FileSystemService = MockFileSystemService.Instance;
             Configuration.StorageSpace = StorageSpace.Instance;
             Configuration.SubDirectoryPath = "test";
             Configuration.FileName = "test.dat";

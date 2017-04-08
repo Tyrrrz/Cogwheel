@@ -8,6 +8,5 @@ namespace Tyrrrz.Settings
     [AttributeUsage(AttributeTargets.Property)]
     public class IgnorePropertyAttribute : Attribute
     {
-        
     }
 }

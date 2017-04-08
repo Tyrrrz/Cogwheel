@@ -16,8 +16,8 @@ namespace Tyrrrz.Settings.Tests
             Assert.IsNotNull(manager.Configuration);
             Assert.IsNotNull(manager.Configuration.SubDirectoryPath);
             Assert.IsNotNull(manager.Configuration.FileName);
-            Assert.IsNotNull(manager.Configuration.FullDirectoryPath);
-            Assert.IsNotNull(manager.Configuration.FullFilePath);
+            Assert.IsNotNull(manager.FullDirectoryPath);
+            Assert.IsNotNull(manager.FullFilePath);
         }
 
         [TestMethod]
@@ -121,7 +121,7 @@ namespace Tyrrrz.Settings.Tests
 
             // Save
             manager.Save();
-            Assert.IsTrue(MockFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
+            Assert.IsTrue(MockFileSystemService.Instance.FileExists(manager.FullFilePath));
         }
 
         [TestMethod]
@@ -220,7 +220,7 @@ namespace Tyrrrz.Settings.Tests
 
             // Delete
             manager.Delete();
-            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
+            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.FullFilePath));
         }
 
         [TestMethod]
@@ -233,8 +233,8 @@ namespace Tyrrrz.Settings.Tests
 
             // Delete
             manager.Delete(true);
-            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.Configuration.FullFilePath));
-            Assert.IsFalse(MockFileSystemService.Instance.DirectoryExists(manager.Configuration.FullDirectoryPath));
+            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.FullFilePath));
+            Assert.IsFalse(MockFileSystemService.Instance.DirectoryExists(manager.FullDirectoryPath));
         }
 
         [TestMethod]

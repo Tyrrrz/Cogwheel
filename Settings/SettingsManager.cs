@@ -10,25 +10,37 @@ namespace Tyrrrz.Settings
     /// </summary>
     public abstract class SettingsManager : ObservableObject, ICloneable
     {
+        private readonly ISerializationService _serializationService;
+        private readonly IFileSystemService _fileSystemService;
+
         private bool _isSaved = true;
 
         /// <summary>
         /// Configuration object
         /// </summary>
         [IgnoreProperty]
-        public Configuration Configuration { get; }
+        public Configuration Configuration { get; set; }
 
         /// <summary>
-        /// Shortcut for serializer
+        /// Full path of the storage directory
         /// </summary>
         [IgnoreProperty]
-        private ISerializationService SerializationService => Configuration.SerializationService;
+        public string FullDirectoryPath
+        {
+            get
+            {
+                string result = _fileSystemService.GetDirectoryLocation(Configuration.StorageSpace);
+                if (!string.IsNullOrEmpty(Configuration.SubDirectoryPath))
+                    result = _fileSystemService.CombinePath(result, Configuration.SubDirectoryPath);
+                return result;
+            }
+        }
 
         /// <summary>
-        /// Shortcut for file system handler
+        /// Full path of the settings file
         /// </summary>
         [IgnoreProperty]
-        private IFileSystemService FileSystemService => Configuration.FileSystemService;
+        public string FullFilePath => _fileSystemService.CombinePath(FullDirectoryPath, Configuration.FileName);
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
@@ -45,15 +57,31 @@ namespace Tyrrrz.Settings
         }
 
         /// <summary>
-        /// Creates a settings manager with default configuration
+        /// Creates a settings manager with custom services
         /// </summary>
-        protected SettingsManager()
+        protected SettingsManager(ISerializationService serializationService, IFileSystemService fileSystemService)
         {
+            if (serializationService == null)
+                throw new ArgumentNullException(nameof(serializationService));
+            if (fileSystemService == null)
+                throw new ArgumentNullException(nameof(fileSystemService));
+
+            _serializationService = serializationService;
+            _fileSystemService = fileSystemService;
+
             Configuration = new Configuration
             {
                 SubDirectoryPath = Assembly.GetCallingAssembly().GetName().Name,
                 FileName = GetType().Name + ".dat"
             };
+        }
+
+        /// <summary>
+        /// Creates a settings manager with default services
+        /// </summary>
+        protected SettingsManager()
+            : this(JsonNetSerializationService.Instance, DefaultFileSystemService.Instance)
+        {
         }
 
         /// <inheritdoc />
@@ -74,8 +102,11 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void CopyFrom(SettingsManager referenceSettingsManager)
         {
-            var serialized = SerializationService.Serialize(referenceSettingsManager);
-            SerializationService.Populate(serialized, this);
+            if (referenceSettingsManager == null)
+                throw new ArgumentNullException(nameof(referenceSettingsManager));
+
+            var serialized = _serializationService.Serialize(referenceSettingsManager);
+            _serializationService.Populate(serialized, this);
             IsSaved = referenceSettingsManager.IsSaved;
         }
 
@@ -95,11 +126,11 @@ namespace Tyrrrz.Settings
         public virtual void Save()
         {
             // Create the directory
-            FileSystemService.CreateDirectory(Configuration.FullDirectoryPath);
+            _fileSystemService.CreateDirectory(FullDirectoryPath);
 
             // Write file
-            var serialized = SerializationService.Serialize(this);
-            FileSystemService.FileWriteAllBytes(Configuration.FullFilePath, serialized);
+            var serialized = _serializationService.Serialize(this);
+            _fileSystemService.FileWriteAllBytes(FullFilePath, serialized);
             IsSaved = true;
         }
 
@@ -124,9 +155,9 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void Load()
         {
-            if (!FileSystemService.FileExists(Configuration.FullFilePath)) return;
-            var serialized = FileSystemService.FileReadAllBytes(Configuration.FullFilePath);
-            SerializationService.Populate(serialized, this);
+            if (!_fileSystemService.FileExists(FullFilePath)) return;
+            var serialized = _fileSystemService.FileReadAllBytes(FullFilePath);
+            _serializationService.Populate(serialized, this);
             IsSaved = true;
         }
 
@@ -163,11 +194,11 @@ namespace Tyrrrz.Settings
         {
             if (deleteParentDirectory)
             {
-                FileSystemService.DeleteDirectory(Configuration.FullDirectoryPath, true);
+                _fileSystemService.DeleteDirectory(FullDirectoryPath, true);
             }
             else
             {
-                FileSystemService.DeleteFile(Configuration.FullFilePath);
+                _fileSystemService.DeleteFile(FullFilePath);
             }
         }
     }
