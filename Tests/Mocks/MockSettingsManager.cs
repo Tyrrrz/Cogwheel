@@ -1,5 +1,5 @@
 ﻿using System;
-using Tyrrrz.Settings.Services;
+using Tyrrrz.Settings.Serialization;
 
 namespace Tyrrrz.Settings.Tests.Mocks
 {
@@ -15,48 +15,48 @@ namespace Tyrrrz.Settings.Tests.Mocks
 
         public int Int
         {
-            get { return _int; }
-            set { Set(ref _int, value); }
+            get => _int;
+            set => Set(ref _int, value);
         }
 
         public string Str
         {
-            get { return _str; }
-            set { Set(ref _str, value); }
+            get => _str;
+            set => Set(ref _str, value);
         }
 
         public double Double
         {
-            get { return _double; }
-            set { Set(ref _double, value); }
+            get => _double;
+            set => Set(ref _double, value);
         }
 
         public DateTime DateTime
         {
-            get { return _dateTime; }
-            set { Set(ref _dateTime, value); }
+            get => _dateTime;
+            set => Set(ref _dateTime, value);
         }
 
         public MockEnum Enum
         {
-            get { return _enum; }
-            set { Set(ref _enum, value); }
+            get => _enum;
+            set => Set(ref _enum, value);
         }
 
         public MockClass Class
         {
-            get { return _class; }
-            set { Set(ref _class, value); }
+            get => _class;
+            set => Set(ref _class, value);
         }
 
         public ushort[] Array
         {
-            get { return _array; }
-            set { Set(ref _array, value); }
+            get => _array;
+            set => Set(ref _array, value);
         }
 
         public MockSettingsManager()
-            : base(JsonNetSerializationService.Instance, MockFileSystemService.Instance)
+            : base(MockFileSystemService.Instance)
         {
             Configuration.StorageSpace = StorageSpace.Instance;
             Configuration.SubDirectoryPath = "test";

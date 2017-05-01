@@ -4,17 +4,17 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Tyrrrz.Settings.Services
+namespace Tyrrrz.Settings.Serialization
 {
-    internal sealed class CustomJsonNetContractResolver : DefaultContractResolver
+    internal sealed class ContractResolver : DefaultContractResolver
     {
-        public static CustomJsonNetContractResolver Instance { get; } = new CustomJsonNetContractResolver();
+        public static ContractResolver Instance { get; } = new ContractResolver();
 
         private static bool IsIgnored(Type declaringType, string propertyName)
         {
             var prop = declaringType.GetProperty(propertyName);
             if (prop == null) return false;
-            return prop.GetCustomAttributes(typeof(IgnorePropertyAttribute), false).Any();
+            return prop.GetCustomAttributes(typeof(IgnoreAttribute), false).Any();
         }
 
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)

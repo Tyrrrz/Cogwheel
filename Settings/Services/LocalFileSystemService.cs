@@ -4,15 +4,10 @@ using System.IO;
 namespace Tyrrrz.Settings.Services
 {
     /// <summary>
-    /// Uses system's file system as persistent storage
+    /// Uses local file system as persistent storage
     /// </summary>
-    public class DefaultFileSystemService : IFileSystemService
+    public class LocalFileSystemService : IFileSystemService
     {
-        /// <summary>
-        /// Default instance
-        /// </summary>
-        public static DefaultFileSystemService Instance { get; } = new DefaultFileSystemService();
-
         /// <inheritdoc />
         public virtual void CreateDirectory(string dirPath)
         {

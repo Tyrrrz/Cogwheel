@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using System.Runtime.CompilerServices;
+using Tyrrrz.Settings.Serialization;
 using Tyrrrz.Settings.Services;
 
 namespace Tyrrrz.Settings
@@ -8,23 +8,22 @@ namespace Tyrrrz.Settings
     /// <summary>
     /// Derive from this class to create a custom settings manager that can de-/serialize its public properties from/to file
     /// </summary>
-    public abstract class SettingsManager : ObservableObject, ICloneable
+    public abstract partial class SettingsManager
     {
-        private readonly ISerializationService _serializationService;
         private readonly IFileSystemService _fileSystemService;
 
         private bool _isSaved = true;
 
         /// <summary>
-        /// Configuration object
+        /// Configuration for this <see cref="SettingsManager"/> instance
         /// </summary>
-        [IgnoreProperty]
+        [Ignore]
         public Configuration Configuration { get; set; }
 
         /// <summary>
         /// Full path of the storage directory
         /// </summary>
-        [IgnoreProperty]
+        [Ignore]
         public string FullDirectoryPath
         {
             get
@@ -39,36 +38,27 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Full path of the settings file
         /// </summary>
-        [IgnoreProperty]
+        [Ignore]
         public string FullFilePath => _fileSystemService.CombinePath(FullDirectoryPath, Configuration.FileName);
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
         /// </summary>
-        [IgnoreProperty]
+        [Ignore]
         public bool IsSaved
         {
-            get { return _isSaved; }
-            protected set
-            {
-                // ReSharper disable once ExplicitCallerInfoArgument
-                base.Set(ref _isSaved, value, nameof(IsSaved));
-            }
+            get => _isSaved;
+            protected set => Set(ref _isSaved, value);
         }
 
         /// <summary>
         /// Creates a settings manager with custom services
         /// </summary>
-        protected SettingsManager(ISerializationService serializationService, IFileSystemService fileSystemService)
+        protected SettingsManager(IFileSystemService fileSystemService)
         {
-            if (serializationService == null)
-                throw new ArgumentNullException(nameof(serializationService));
-            if (fileSystemService == null)
-                throw new ArgumentNullException(nameof(fileSystemService));
+            _fileSystemService = fileSystemService ?? throw new ArgumentNullException(nameof(fileSystemService));
 
-            _serializationService = serializationService;
-            _fileSystemService = fileSystemService;
-
+            // Set default configuration
             Configuration = new Configuration
             {
                 SubDirectoryPath = Assembly.GetCallingAssembly().GetName().Name,
@@ -80,21 +70,8 @@ namespace Tyrrrz.Settings
         /// Creates a settings manager with default services
         /// </summary>
         protected SettingsManager()
-            : this(JsonNetSerializationService.Instance, DefaultFileSystemService.Instance)
+            : this(new LocalFileSystemService())
         {
-        }
-
-        /// <inheritdoc />
-        protected override bool Set<T>(ref T field, T value,
-#if Net45
-            [CallerMemberName]
-#endif
-            string propertyName = null)
-        {
-            // ReSharper disable once ExplicitCallerInfoArgument
-            bool changed = base.Set(ref field, value, propertyName);
-            if (changed) IsSaved = false;
-            return changed;
         }
 
         /// <summary>
@@ -105,19 +82,9 @@ namespace Tyrrrz.Settings
             if (referenceSettingsManager == null)
                 throw new ArgumentNullException(nameof(referenceSettingsManager));
 
-            var serialized = _serializationService.Serialize(referenceSettingsManager);
-            _serializationService.Populate(serialized, this);
+            var serialized = Serializer.Serialize(referenceSettingsManager);
+            Serializer.Populate(serialized, this);
             IsSaved = referenceSettingsManager.IsSaved;
-        }
-
-        /// <summary>
-        /// Clones this <see cref="SettingsManager"/> along with current values of its properties
-        /// </summary>
-        public object Clone()
-        {
-            var clone = (SettingsManager) Activator.CreateInstance(GetType());
-            clone.CopyFrom(this);
-            return clone;
         }
 
         /// <summary>
@@ -125,55 +92,39 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void Save()
         {
-            // Create the directory
-            _fileSystemService.CreateDirectory(FullDirectoryPath);
-
-            // Write file
-            var serialized = _serializationService.Serialize(this);
-            _fileSystemService.FileWriteAllBytes(FullFilePath, serialized);
-            IsSaved = true;
-        }
-
-        /// <summary>
-        /// Tries to save settings to file. If the operation fails - no exception is thrown.
-        /// </summary>
-        public virtual bool TrySave()
-        {
             try
             {
-                Save();
-                return true;
+                // Create the directory
+                _fileSystemService.CreateDirectory(FullDirectoryPath);
+
+                // Write file
+                var serialized = Serializer.Serialize(this);
+                _fileSystemService.FileWriteAllBytes(FullFilePath, serialized);
+                IsSaved = true;
             }
             catch
             {
-                return false;
+                if (Configuration.ThrowIfCannotSave)
+                    throw;
             }
         }
 
         /// <summary>
-        /// Loads settings from file if it exists
+        /// Loads settings from file
         /// </summary>
         public virtual void Load()
         {
-            if (!_fileSystemService.FileExists(FullFilePath)) return;
-            var serialized = _fileSystemService.FileReadAllBytes(FullFilePath);
-            _serializationService.Populate(serialized, this);
-            IsSaved = true;
-        }
-
-        /// <summary>
-        /// Tries to load settings from file if it exists. If the operation fails - no exception is thrown.
-        /// </summary>
-        public virtual bool TryLoad()
-        {
             try
             {
-                Load();
-                return true;
+                if (!_fileSystemService.FileExists(FullFilePath)) return;
+                var serialized = _fileSystemService.FileReadAllBytes(FullFilePath);
+                Serializer.Populate(serialized, this);
+                IsSaved = true;
             }
             catch
             {
-                return false;
+                if (Configuration.ThrowIfCannotLoad)
+                    throw;
             }
         }
 

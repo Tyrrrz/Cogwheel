@@ -6,8 +6,8 @@
 
         public char Char
         {
-            get { return _char; }
-            set { Set(ref _char, value); }
+            get => _char;
+            set => Set(ref _char, value);
         }
     }
 }

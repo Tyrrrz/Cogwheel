@@ -12,9 +12,9 @@ namespace Tyrrrz.Settings.Tests
             var stager = new Stager<MockSettingsManager>();
 
             // Make sure both instances exist and are not the same
-            Assert.IsNotNull(stager.Current);
-            Assert.IsNotNull(stager.Staging);
-            Assert.IsFalse(ReferenceEquals(stager.Current, stager.Staging));
+            Assert.IsNotNull(stager.Stable);
+            Assert.IsNotNull(stager.Dirty);
+            Assert.IsFalse(ReferenceEquals(stager.Stable, stager.Dirty));
         }
 
         [TestMethod]
@@ -25,13 +25,13 @@ namespace Tyrrrz.Settings.Tests
                 new MockSettingsManager {Int = 6969});
 
             // Make sure both instances exist and are not the same
-            Assert.IsNotNull(stager.Current);
-            Assert.IsNotNull(stager.Staging);
-            Assert.IsFalse(ReferenceEquals(stager.Current, stager.Staging));
+            Assert.IsNotNull(stager.Stable);
+            Assert.IsNotNull(stager.Dirty);
+            Assert.IsFalse(ReferenceEquals(stager.Stable, stager.Dirty));
 
             // Check if factory worked
-            Assert.AreEqual(1337, stager.Current.Int);
-            Assert.AreEqual(6969, stager.Staging.Int);
+            Assert.AreEqual(1337, stager.Stable.Int);
+            Assert.AreEqual(6969, stager.Dirty.Int);
         }
 
         [TestMethod]
@@ -40,19 +40,19 @@ namespace Tyrrrz.Settings.Tests
             var stager = new Stager<MockSettingsManager>();
 
             // Should be in sync
-            Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Change value
-            stager.Staging.Str = "553322";
+            stager.Dirty.Str = "553322";
 
             // Should not be in sync
-            Assert.AreNotEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreNotEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Save
             stager.Save();
 
             // Should be in sync
-            Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
         }
 
         [TestMethod]
@@ -64,19 +64,19 @@ namespace Tyrrrz.Settings.Tests
             stager.Save();
 
             // Should be in sync
-            Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Change value
-            stager.Staging.Str = "553322";
+            stager.Dirty.Str = "553322";
 
             // Should not be in sync
-            Assert.AreNotEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreNotEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Load
             stager.Load();
 
             // Should be in sync
-            Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
         }
 
         [TestMethod]
@@ -85,19 +85,19 @@ namespace Tyrrrz.Settings.Tests
             var stager = new Stager<MockSettingsManager>();
 
             // Should be in sync
-            Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Change value
-            stager.Staging.Str = "553322";
+            stager.Dirty.Str = "553322";
 
             // Should not be in sync
-            Assert.AreNotEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreNotEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Save
             stager.Save();
 
             // Should be in sync
-            Assert.AreEqual(stager.Staging.Str, stager.Current.Str);
+            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
         }
     }
 }

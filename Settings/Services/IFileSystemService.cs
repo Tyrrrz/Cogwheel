@@ -1,7 +1,7 @@
 ﻿namespace Tyrrrz.Settings.Services
 {
     /// <summary>
-    /// Abstraction over the file system used for storing and retrieving settings
+    /// Abstraction over the file system
     /// </summary>
     public interface IFileSystemService
     {

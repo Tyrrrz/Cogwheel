@@ -118,10 +118,11 @@ namespace Tyrrrz.Settings.Tests
         public void SaveTest()
         {
             var manager = new MockSettingsManager();
+            var fs = MockFileSystemService.Instance;
 
             // Save
             manager.Save();
-            Assert.IsTrue(MockFileSystemService.Instance.FileExists(manager.FullFilePath));
+            Assert.IsTrue(fs.FileExists(manager.FullFilePath));
         }
 
         [TestMethod]
@@ -214,27 +215,29 @@ namespace Tyrrrz.Settings.Tests
         public void DeleteTest()
         {
             var manager = new MockSettingsManager();
+            var fs = MockFileSystemService.Instance;
 
             // Save
             manager.Save();
 
             // Delete
             manager.Delete();
-            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.FullFilePath));
+            Assert.IsFalse(fs.FileExists(manager.FullFilePath));
         }
 
         [TestMethod]
         public void DeleteWithDirTest()
         {
             var manager = new MockSettingsManager();
+            var fs = MockFileSystemService.Instance;
 
             // Save
             manager.Save();
 
             // Delete
             manager.Delete(true);
-            Assert.IsFalse(MockFileSystemService.Instance.FileExists(manager.FullFilePath));
-            Assert.IsFalse(MockFileSystemService.Instance.DirectoryExists(manager.FullDirectoryPath));
+            Assert.IsFalse(fs.FileExists(manager.FullFilePath));
+            Assert.IsFalse(fs.DirectoryExists(manager.FullDirectoryPath));
         }
 
         [TestMethod]

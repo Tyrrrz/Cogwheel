@@ -3,92 +3,55 @@
 namespace Tyrrrz.Settings
 {
     /// <summary>
-    /// Stages changes in a settings manager object, exposing them only after they are saved
+    /// Stages two instances <see cref="SettingsManager"/>, exposing them as stable and dirty
     /// </summary>
-    /// <typeparam name="T">Type of this object</typeparam>
+    /// <typeparam name="T">Derived type of the used <see cref="SettingsManager"/></typeparam>
     public class Stager<T> where T : SettingsManager
     {
         /// <summary>
-        /// Current settings manager, all properties are up to date with the persistently stored version. Use only as read-only.
+        /// Stable instance. All properties are up to date with the persistently stored version. Use only as read-only.
         /// </summary>
-        public T Current { get; }
+        public T Stable { get; }
 
         /// <summary>
-        /// Staging settings manager, properties may be unsynchronized with the current settings manager, until they are saved to persistent storage.
+        /// Dirty instance. Properties may be unsynchronized until they are saved to persistent storage.
         /// </summary>
-        public T Staging { get; }
+        public T Dirty { get; }
 
         /// <summary>
-        /// Create a stager for a settings manager with the default configuration
+        /// Create a stager for <see cref="SettingsManager"/> by using the default constructor
         /// </summary>
         public Stager()
         {
-            Current = (T) Activator.CreateInstance(typeof (T));
-            Staging = (T) Activator.CreateInstance(typeof (T));
+            Stable = (T) Activator.CreateInstance(typeof (T));
+            Dirty = (T) Activator.CreateInstance(typeof (T));
         }
 
         /// <summary>
-        /// Creates a stager for a settings manager using predefined managers
+        /// Creates a stager for given <see cref="SettingsManager"/> instances
         /// </summary>
         public Stager(SettingsManager current, SettingsManager staging)
         {
-            if (current == null)
-                throw new ArgumentNullException(nameof(current));
-            if (staging == null)
-                throw new ArgumentNullException(nameof(staging));
-
-            Current = (T) current;
-            Staging = (T) staging;
+            Stable = (T) current ?? throw new ArgumentNullException(nameof(current));
+            Dirty = (T) staging ?? throw new ArgumentNullException(nameof(staging));
         }
 
         /// <summary>
-        /// Saves the settings to file
+        /// Saves the settings to file and synchronizes instances
         /// </summary>
         public virtual void Save()
         {
-            Staging.Save();
-            Current.CopyFrom(Staging);
+            Dirty.Save();
+            Stable.CopyFrom(Dirty);
         }
 
         /// <summary>
-        /// Tries to save settings to file. If the operation fails - no exception is thrown.
-        /// </summary>
-        public virtual bool TrySave()
-        {
-            try
-            {
-                Save();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Loads settings from file (if it exists)
+        /// Loads settings from file and synchronizes instances
         /// </summary>
         public virtual void Load()
         {
-            Staging.Load();
-            Current.CopyFrom(Staging);
-        }
-
-        /// <summary>
-        /// Tries to load settings from file if it exists. If the operation fails - no exception is thrown.
-        /// </summary>
-        public virtual bool TryLoad()
-        {
-            try
-            {
-                Load();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            Dirty.Load();
+            Stable.CopyFrom(Dirty);
         }
 
         /// <summary>
@@ -96,7 +59,7 @@ namespace Tyrrrz.Settings
         /// </summary>
         public virtual void RevertStaging()
         {
-            Staging.CopyFrom(Current);
+            Dirty.CopyFrom(Stable);
         }
     }
 }
