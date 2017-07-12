@@ -2,10 +2,10 @@
 
 My settings library
 
-**Download:**
+## Download
 
 - Using nuget: `Install-Package Tyrrrz.Settings`
 
-**Dependencies:**
+## Dependencies
 
 - [Newtonsoft.Json](http://www.newtonsoft.com/json) - save to/load from file
