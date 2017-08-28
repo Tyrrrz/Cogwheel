@@ -1,7 +1,7 @@
 ﻿using System;
-using Tyrrrz.Settings.Serialization;
+using Tyrrrz.Settings;
 
-namespace Tyrrrz.Settings.Tests.Mocks
+namespace Tests.Mocks
 {
     public class MockSettingsManager : SettingsManager
     {

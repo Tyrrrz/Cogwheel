@@ -1,7 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tyrrrz.Settings.Tests.Mocks;
+using Tests.Mocks;
+using Tyrrrz.Settings;
 
-namespace Tyrrrz.Settings.Tests
+namespace Tests
 {
     [TestClass]
     public class StagerTests

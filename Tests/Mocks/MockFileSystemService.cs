@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Tyrrrz.Settings;
 using Tyrrrz.Settings.Services;
 
-namespace Tyrrrz.Settings.Tests.Mocks
+namespace Tests.Mocks
 {
     public class MockFileSystemService : IFileSystemService
     {

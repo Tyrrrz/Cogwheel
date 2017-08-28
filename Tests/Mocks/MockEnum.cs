@@ -1,4 +1,4 @@
-﻿namespace Tyrrrz.Settings.Tests.Mocks
+﻿namespace Tests.Mocks
 {
     public enum MockEnum
     {
