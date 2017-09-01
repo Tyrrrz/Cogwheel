@@ -85,7 +85,7 @@ namespace Tests
         public void PropertyChangedDistinctTest()
         {
             var manager = new MockSettingsManager();
-            int triggerCount = 0;
+            var triggerCount = 0;
             manager.PropertyChanged += (sender, args) =>
             {
                 // Ignore IsSaved changing

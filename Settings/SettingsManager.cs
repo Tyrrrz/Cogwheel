@@ -28,7 +28,7 @@ namespace Tyrrrz.Settings
         {
             get
             {
-                string result = _fileSystemService.GetDirectoryLocation(Configuration.StorageSpace);
+                var result = _fileSystemService.GetDirectoryLocation(Configuration.StorageSpace);
                 if (!string.IsNullOrEmpty(Configuration.SubDirectoryPath))
                     result = _fileSystemService.CombinePath(result, Configuration.SubDirectoryPath);
                 return result;

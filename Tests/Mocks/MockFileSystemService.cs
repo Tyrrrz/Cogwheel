@@ -34,7 +34,7 @@ namespace Tests.Mocks
             _dirs.Remove(dirPath);
             if (recursive)
             {
-                foreach (string file in _files.Where(kvp => kvp.Key.StartsWith(dirPath)).Select(kvp => kvp.Key).ToArray())
+                foreach (var file in _files.Where(kvp => kvp.Key.StartsWith(dirPath)).Select(kvp => kvp.Key).ToArray())
                     _files.Remove(file);
             }
         }

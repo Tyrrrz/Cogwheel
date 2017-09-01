@@ -30,7 +30,7 @@ namespace Tyrrrz.Settings
                 throw new ArgumentNullException(nameof(propertyExpression));
 
             // Get property name
-            string propertyName = ((propertyExpression.Body as MemberExpression)?.Member as PropertyInfo)?.Name;
+            var propertyName = ((propertyExpression.Body as MemberExpression)?.Member as PropertyInfo)?.Name;
             if (propertyName == null)
                 throw new Exception("Could not get property name from expression");
 
