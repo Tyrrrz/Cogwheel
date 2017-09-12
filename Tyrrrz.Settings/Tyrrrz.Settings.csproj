@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net45</TargetFramework>
-    <AssemblyName>Tyrrrz.Settings</AssemblyName>
-    <RootNamespace>$(AssemblyName)</RootNamespace>
     <Version>1.3</Version>
     <Company>Tyrrrz</Company>
     <Authors>$(Company)</Authors>

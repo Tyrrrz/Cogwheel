@@ -1,4 +1,4 @@
-﻿namespace Tests.Mocks
+﻿namespace Tyrrrz.Settings.Tests.Mocks
 {
     public class MockClass
     {

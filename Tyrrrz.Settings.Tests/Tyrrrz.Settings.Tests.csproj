@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Settings\Settings.csproj" />
+    <ProjectReference Include="..\Tyrrrz.Settings\Tyrrrz.Settings.csproj" />
   </ItemGroup>
 
 </Project>

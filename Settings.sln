@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{98447497-B438-45B9-9268-FDEACBE94FE4}"
 	ProjectSection(SolutionItems) = preProject
@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Settings", "Settings\Settings.csproj", "{C2BCAF75-BF56-43AC-B349-F3000784E659}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tyrrrz.Settings", "Tyrrrz.Settings\Tyrrrz.Settings.csproj", "{C2BCAF75-BF56-43AC-B349-F3000784E659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{6B12175C-7F3A-4047-844A-091E76164709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tyrrrz.Settings.Tests", "Tyrrrz.Settings.Tests\Tyrrrz.Settings.Tests.csproj", "{6B12175C-7F3A-4047-844A-091E76164709}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A3E8D6E0-64EE-4E60-8DCF-622B4F845242}
 	EndGlobalSection
 EndGlobal

@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.Mocks;
+using Tyrrrz.Settings.Tests.Mocks;
 
-namespace Tests
+namespace Tyrrrz.Settings.Tests
 {
     [TestClass]
     public class SettingsManagerTests
