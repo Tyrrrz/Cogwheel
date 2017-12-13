@@ -55,11 +55,10 @@ namespace Tyrrrz.Settings.Tests.Mocks
         }
 
         public MockSettingsManager()
-            : base(MockFileSystemService.Instance)
         {
             Configuration.StorageSpace = StorageSpace.Instance;
-            Configuration.SubDirectoryPath = "test";
-            Configuration.FileName = "test.dat";
+            Configuration.SubDirectoryPath = "TestSettings";
+            Configuration.FileName = "Config.dat";
         }
     }
 }

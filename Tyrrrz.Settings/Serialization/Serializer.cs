@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 namespace Tyrrrz.Settings.Serialization
 {
     /// <summary>
@@ -7,7 +6,7 @@ namespace Tyrrrz.Settings.Serialization
     /// </summary>
     public static class Serializer
     {
-        private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
             DefaultValueHandling = DefaultValueHandling.Include,
@@ -18,25 +17,25 @@ namespace Tyrrrz.Settings.Serialization
         /// <summary>
         /// Serialize object
         /// </summary>
-        public static byte[] Serialize(object obj)
+        public static string Serialize(object obj)
         {
-            return Encoding.Unicode.GetBytes(JsonConvert.SerializeObject(obj, SerializerSettings));
+            return JsonConvert.SerializeObject(obj, JsonSerializerSettings);
         }
 
         /// <summary>
         /// Deserialize object
         /// </summary>
-        public static T Deserialize<T>(byte[] data)
+        public static T Deserialize<T>(string serialized)
         {
-            return JsonConvert.DeserializeObject<T>(Encoding.Unicode.GetString(data), SerializerSettings);
+            return JsonConvert.DeserializeObject<T>(serialized, JsonSerializerSettings);
         }
 
         /// <summary>
         /// Populate an existing object with serialized data
         /// </summary>
-        public static void Populate(byte[] data, object obj)
+        public static void Populate(string serialized, object obj)
         {
-            JsonConvert.PopulateObject(Encoding.Unicode.GetString(data), obj, SerializerSettings);
+            JsonConvert.PopulateObject(serialized, obj, JsonSerializerSettings);
         }
     }
 }

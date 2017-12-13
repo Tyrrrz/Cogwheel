@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using Tyrrrz.Settings.Serialization;
-using Tyrrrz.Settings.Services;
 
 namespace Tyrrrz.Settings
 {
@@ -10,8 +10,6 @@ namespace Tyrrrz.Settings
     /// </summary>
     public abstract partial class SettingsManager
     {
-        private readonly IFileSystemService _fileSystemService;
-
         private bool _isSaved = true;
 
         /// <summary>
@@ -28,9 +26,9 @@ namespace Tyrrrz.Settings
         {
             get
             {
-                var result = _fileSystemService.GetDirectoryLocation(Configuration.StorageSpace);
+                var result = Configuration.StorageSpace.GetDirectoryPath();
                 if (!string.IsNullOrEmpty(Configuration.SubDirectoryPath))
-                    result = _fileSystemService.CombinePath(result, Configuration.SubDirectoryPath);
+                    result = Path.Combine(result, Configuration.SubDirectoryPath);
                 return result;
             }
         }
@@ -39,7 +37,7 @@ namespace Tyrrrz.Settings
         /// Full path of the settings file
         /// </summary>
         [Ignore]
-        public string FullFilePath => _fileSystemService.CombinePath(FullDirectoryPath, Configuration.FileName);
+        public string FullFilePath => Path.Combine(FullDirectoryPath, Configuration.FileName);
 
         /// <summary>
         /// Whether the settings have been saved since the last time they were changed
@@ -52,26 +50,16 @@ namespace Tyrrrz.Settings
         }
 
         /// <summary>
-        /// Creates a settings manager with custom services
+        /// Creates a settings manager
         /// </summary>
-        protected SettingsManager(IFileSystemService fileSystemService)
+        protected SettingsManager()
         {
-            _fileSystemService = fileSystemService ?? throw new ArgumentNullException(nameof(fileSystemService));
-
             // Set default configuration
             Configuration = new Configuration
             {
                 SubDirectoryPath = Assembly.GetCallingAssembly().GetName().Name,
                 FileName = GetType().Name + ".dat"
             };
-        }
-
-        /// <summary>
-        /// Creates a settings manager with default services
-        /// </summary>
-        protected SettingsManager()
-            : this(new LocalFileSystemService())
-        {
         }
 
         /// <summary>
@@ -84,6 +72,7 @@ namespace Tyrrrz.Settings
 
             var serialized = Serializer.Serialize(referenceSettingsManager);
             Serializer.Populate(serialized, this);
+
             IsSaved = referenceSettingsManager.IsSaved;
         }
 
@@ -95,11 +84,12 @@ namespace Tyrrrz.Settings
             try
             {
                 // Create the directory
-                _fileSystemService.CreateDirectory(FullDirectoryPath);
+                Directory.CreateDirectory(FullDirectoryPath);
 
                 // Write file
                 var serialized = Serializer.Serialize(this);
-                _fileSystemService.FileWriteAllBytes(FullFilePath, serialized);
+                File.WriteAllText(FullFilePath, serialized);
+
                 IsSaved = true;
             }
             catch
@@ -116,9 +106,11 @@ namespace Tyrrrz.Settings
         {
             try
             {
-                if (!_fileSystemService.FileExists(FullFilePath)) return;
-                var serialized = _fileSystemService.FileReadAllBytes(FullFilePath);
+                if (!File.Exists(FullFilePath)) return;
+
+                var serialized = File.ReadAllText(FullFilePath);
                 Serializer.Populate(serialized, this);
+
                 IsSaved = true;
             }
             catch
@@ -145,11 +137,23 @@ namespace Tyrrrz.Settings
         {
             if (deleteParentDirectory)
             {
-                _fileSystemService.DeleteDirectory(FullDirectoryPath, true);
+                try
+                {
+                    Directory.Delete(FullDirectoryPath, true);
+                }
+                catch (DirectoryNotFoundException)
+                {
+                }
             }
             else
             {
-                _fileSystemService.DeleteFile(FullFilePath);
+                try
+                {
+                    File.Delete(FullFilePath);
+                }
+                catch (FileNotFoundException)
+                {
+                }
             }
         }
     }

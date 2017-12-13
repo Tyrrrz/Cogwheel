@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tyrrrz.Settings.Tests.Mocks;
 
@@ -118,11 +119,10 @@ namespace Tyrrrz.Settings.Tests
         public void SaveTest()
         {
             var manager = new MockSettingsManager();
-            var fs = MockFileSystemService.Instance;
 
             // Save
             manager.Save();
-            Assert.IsTrue(fs.FileExists(manager.FullFilePath));
+            Assert.IsTrue(File.Exists(manager.FullFilePath));
         }
 
         [TestMethod]
@@ -215,29 +215,27 @@ namespace Tyrrrz.Settings.Tests
         public void DeleteTest()
         {
             var manager = new MockSettingsManager();
-            var fs = MockFileSystemService.Instance;
 
             // Save
             manager.Save();
 
             // Delete
             manager.Delete();
-            Assert.IsFalse(fs.FileExists(manager.FullFilePath));
+            Assert.IsFalse(File.Exists(manager.FullFilePath));
         }
 
         [TestMethod]
         public void DeleteWithDirTest()
         {
             var manager = new MockSettingsManager();
-            var fs = MockFileSystemService.Instance;
 
             // Save
             manager.Save();
 
             // Delete
             manager.Delete(true);
-            Assert.IsFalse(fs.FileExists(manager.FullFilePath));
-            Assert.IsFalse(fs.DirectoryExists(manager.FullDirectoryPath));
+            Assert.IsFalse(File.Exists(manager.FullFilePath));
+            Assert.IsFalse(Directory.Exists(manager.FullDirectoryPath));
         }
 
         [TestMethod]
@@ -264,6 +262,19 @@ namespace Tyrrrz.Settings.Tests
             Assert.IsNotNull(newManager.Class);
             Assert.AreEqual(132, newManager.Class.Long);
             Assert.AreEqual('Q', newManager.Char);
+        }
+
+        [TestCleanup]
+        public void Cleanup()
+        {
+            var mock = new MockSettingsManager();
+            try
+            {
+                Directory.Delete(mock.FullDirectoryPath, true);
+            }
+            catch (DirectoryNotFoundException)
+            {
+            }
         }
     }
 }
