@@ -109,6 +109,11 @@ namespace Tyrrrz.Settings
                 if (!File.Exists(FullFilePath)) return;
 
                 var serialized = File.ReadAllText(FullFilePath);
+
+                // HACK: reverse compatibility
+                // older versions of this library incorrectly saved data
+                serialized = serialized.Replace("\0", "");
+
                 Serializer.Populate(serialized, this);
 
                 IsSaved = true;
