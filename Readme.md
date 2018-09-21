@@ -1,10 +1,10 @@
-# Tyrrrz Settings Library
+# Tyrrrz.Settings
 
 My settings library
 
 ## Download
 
-- Using nuget: `Install-Package Tyrrrz.Settings`
+- [NuGet](https://nuget.org/packages/Tyrrrz.Settings): `Install-Package Tyrrrz.Settings`
 
 ## Dependencies
 
