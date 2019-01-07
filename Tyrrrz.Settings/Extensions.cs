@@ -21,7 +21,7 @@ namespace Tyrrrz.Settings
                 case StorageSpace.MachineDomain:
                     return Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
                 case StorageSpace.Instance:
-                    return Environment.CurrentDirectory;
+                    return AppDomain.CurrentDomain.BaseDirectory;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(storageSpace), storageSpace, null);
             }
