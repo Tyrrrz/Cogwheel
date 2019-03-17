@@ -52,10 +52,6 @@ namespace Tyrrrz.Settings
             // Raise event
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-            // Invalidate IsSaved
-            if (propertyName != nameof(IsSaved))
-                IsSaved = false;
-
             return true;
         }
     }

@@ -54,6 +54,13 @@ namespace Tyrrrz.Settings
         /// </summary>
         protected SettingsManager()
         {
+            // Wire to its own INotifyPropertyChanged to handle IsSaved
+            PropertyChanged += (sender, args) =>
+            {
+                if (args.PropertyName != nameof(IsSaved))
+                    IsSaved = false;
+            };
+
             // Set default configuration
             Configuration = new Configuration
             {
