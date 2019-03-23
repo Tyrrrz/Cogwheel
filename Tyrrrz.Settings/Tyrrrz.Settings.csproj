@@ -8,7 +8,7 @@
     <Copyright>Copyright (C) Alexey Golub</Copyright>
     <Description>JSON.Net-powered settings manager</Description>
     <PackageProjectUrl>https://github.com/Tyrrrz/Settings</PackageProjectUrl>
-    <PackageLicenseUrl>https://raw.githubusercontent.com/Tyrrrz/Settings/master/License.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
