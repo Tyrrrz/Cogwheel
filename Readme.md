@@ -4,7 +4,7 @@ My settings library
 
 ## Download
 
-- [NuGet](https://nuget.org/packages/Tyrrrz.Settings): `Install-Package Tyrrrz.Settings`
+- [NuGet](https://nuget.org/packages/Tyrrrz.Settings): `dotnet add package Tyrrrz.Settings`
 
 ## Dependencies
 
