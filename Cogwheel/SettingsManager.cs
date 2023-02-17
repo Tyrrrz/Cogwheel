@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Tyrrrz.Settings.Serialization;
+using Cogwheel.Serialization;
 
-namespace Tyrrrz.Settings
+namespace Cogwheel
 {
     /// <summary>
     /// Derive from this class to create a custom settings manager that can de-/serialize its public properties from/to file

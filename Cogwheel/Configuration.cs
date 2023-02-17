@@ -1,4 +1,4 @@
-﻿namespace Tyrrrz.Settings
+﻿namespace Cogwheel
 {
     /// <summary>
     /// Configuration for <see cref="SettingsManager"/>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tyrrrz.Settings
+namespace Cogwheel
 {
     /// <summary>
     /// Extensions

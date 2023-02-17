@@ -4,7 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Tyrrrz.Settings.Serialization
+namespace Cogwheel.Serialization
 {
     internal sealed class ContractResolver : DefaultContractResolver
     {

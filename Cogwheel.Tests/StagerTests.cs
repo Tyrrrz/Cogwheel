@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tyrrrz.Settings.Tests.Mocks;
+﻿using Cogwheel.Tests.Mocks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tyrrrz.Settings.Tests
+namespace Cogwheel.Tests
 {
     [TestClass]
     public class StagerTests

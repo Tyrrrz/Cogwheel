@@ -1,4 +1,4 @@
-﻿namespace Tyrrrz.Settings.Tests.Mocks
+﻿namespace Cogwheel.Tests.Mocks
 {
     public class MockSettingsManagerNewer : MockSettingsManager
     {

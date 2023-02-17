@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace Tyrrrz.Settings
+namespace Cogwheel
 {
     public abstract partial class SettingsManager : INotifyPropertyChanged
     {
@@ -16,7 +16,7 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Raises the property changed event for given property
         /// </summary>
-        protected virtual void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -40,7 +40,7 @@ namespace Tyrrrz.Settings
         /// <summary>
         /// Sets a property to its new value and raises an event if necessary
         /// </summary>
-        protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
         {
             // If value hasn't been updated - return
             if (Equals(field, value))

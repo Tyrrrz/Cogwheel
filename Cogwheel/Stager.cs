@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tyrrrz.Settings
+namespace Cogwheel
 {
     /// <summary>
     /// Stages two instances <see cref="SettingsManager"/>, exposing them as stable and dirty

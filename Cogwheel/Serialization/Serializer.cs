@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-namespace Tyrrrz.Settings.Serialization
+namespace Cogwheel.Serialization
 {
     /// <summary>
     /// Performs serialization and deserialization

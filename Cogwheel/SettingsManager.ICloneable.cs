@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tyrrrz.Settings
+namespace Cogwheel
 {
     public abstract partial class SettingsManager : ICloneable
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Tyrrrz.Settings
+namespace Cogwheel
 {
     /// <summary>
     /// Specifies that the marked property does not need to be serialized

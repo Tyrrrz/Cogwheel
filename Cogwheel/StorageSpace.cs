@@ -1,4 +1,4 @@
-﻿namespace Tyrrrz.Settings
+﻿namespace Cogwheel
 {
     /// <summary>
     /// Determines where the settings files will be stored

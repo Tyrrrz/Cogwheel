@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net462;netstandard2.0</TargetFrameworks>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>$(Company)</Authors>
+    <Description>JSON.Net-powered settings manager</Description>
+    <PackageTags>shell pipe command line executable interface wrapper standard input output error arguments net core</PackageTags>
+    <PackageProjectUrl>https://github.com/Tyrrrz/Cogwheel</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Tyrrrz/Cogwheel/blob/master/Changelog.md</PackageReleaseNotes>
+    <PackageReadmeFile>Readme.md</PackageReadmeFile>
+    <PackageIcon>favicon.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../Readme.md" Pack="true" PackagePath="" Visible="false" />
+    <None Include="../favicon.png" Pack="true" PackagePath="" Visible="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
+    <PackageReference Include="PolySharp" Version="1.8.1" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Tyrrrz.Settings.Tests.Mocks
+namespace Cogwheel.Tests.Mocks
 {
     public class MockSettingsManager : SettingsManager
     {
         private int _int = 5;
-        private string _str = "Hello World";
+        private string? _str = "Hello World";
         private double _double;
         private DateTime _dateTime;
         private MockEnum _enum = MockEnum.Two;
-        private MockClass _class;
+        private MockClass? _class;
         private ushort[] _array = {3, 14, 22};
 
         public int Int
@@ -18,7 +18,7 @@ namespace Tyrrrz.Settings.Tests.Mocks
             set => Set(ref _int, value);
         }
 
-        public string Str
+        public string? Str
         {
             get => _str;
             set => Set(ref _str, value);
@@ -42,7 +42,7 @@ namespace Tyrrrz.Settings.Tests.Mocks
             set => Set(ref _enum, value);
         }
 
-        public MockClass Class
+        public MockClass? Class
         {
             get => _class;
             set => Set(ref _class, value);

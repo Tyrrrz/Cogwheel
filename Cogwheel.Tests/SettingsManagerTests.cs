@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
+using Cogwheel.Tests.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tyrrrz.Settings.Tests.Mocks;
 
-namespace Tyrrrz.Settings.Tests
+namespace Cogwheel.Tests
 {
     [TestClass]
     public class SettingsManagerTests
@@ -36,7 +36,7 @@ namespace Tyrrrz.Settings.Tests
 
             // Check values
             Assert.IsNotNull(manager1.Class);
-            Assert.AreEqual(123123, manager1.Class.Decimal);
+            Assert.AreEqual(123123, manager1.Class!.Decimal);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Tyrrrz.Settings.Tests
             Assert.IsNotNull(clone);
 
             // Check values
-            Assert.IsNotNull(clone.Array);
+            Assert.IsNotNull(clone!.Array);
             Assert.AreEqual(3, clone.Array.Length);
             Assert.AreEqual(99, clone.Array[0]);
             Assert.AreEqual(5, clone.Array[1]);
@@ -63,7 +63,7 @@ namespace Tyrrrz.Settings.Tests
         public void PropertyChangedTest()
         {
             var manager = new MockSettingsManager();
-            string changedProperty = null;
+            string? changedProperty = null;
             manager.PropertyChanged += (sender, args) =>
             {
                 // Ignore IsSaved changing
@@ -256,11 +256,11 @@ namespace Tyrrrz.Settings.Tests
 
             // Load
             newManager.Load();
-            
+
             // Check values
             Assert.AreEqual(66.55, newManager.Double);
             Assert.IsNotNull(newManager.Class);
-            Assert.AreEqual(132, newManager.Class.Long);
+            Assert.AreEqual(132, newManager.Class!.Long);
             Assert.AreEqual('Q', newManager.Char);
         }
 
