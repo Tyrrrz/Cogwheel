@@ -1,27 +1,26 @@
 ﻿using System;
 using System.IO;
 using Cogwheel.Tests.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Cogwheel.Tests
 {
-    [TestClass]
-    public class SettingsManagerTests
+    public class SettingsManagerTests : IDisposable
     {
-        [TestMethod]
+        [Fact]
         public void InstantiateTest()
         {
             var manager = new MockSettingsManager();
 
             // Check that configuration properties are set
-            Assert.IsNotNull(manager.Configuration);
-            Assert.IsNotNull(manager.Configuration.SubDirectoryPath);
-            Assert.IsNotNull(manager.Configuration.FileName);
-            Assert.IsNotNull(manager.FullDirectoryPath);
-            Assert.IsNotNull(manager.FullFilePath);
+            Assert.NotNull(manager.Configuration);
+            Assert.NotNull(manager.Configuration.SubDirectoryPath);
+            Assert.NotNull(manager.Configuration.FileName);
+            Assert.NotNull(manager.FullDirectoryPath);
+            Assert.NotNull(manager.FullFilePath);
         }
 
-        [TestMethod]
+        [Fact]
         public void CopyFromTest()
         {
             var manager1 = new MockSettingsManager();
@@ -35,11 +34,11 @@ namespace Cogwheel.Tests
             manager1.CopyFrom(manager2);
 
             // Check values
-            Assert.IsNotNull(manager1.Class);
-            Assert.AreEqual(123123, manager1.Class!.Decimal);
+            Assert.NotNull(manager1.Class);
+            Assert.Equal(123123, manager1.Class!.Decimal);
         }
 
-        [TestMethod]
+        [Fact]
         public void CloneTest()
         {
             var manager = new MockSettingsManager();
@@ -49,17 +48,17 @@ namespace Cogwheel.Tests
 
             // Clone
             var clone = manager.Clone() as MockSettingsManager;
-            Assert.IsNotNull(clone);
+            Assert.NotNull(clone);
 
             // Check values
-            Assert.IsNotNull(clone!.Array);
-            Assert.AreEqual(3, clone.Array.Length);
-            Assert.AreEqual(99, clone.Array[0]);
-            Assert.AreEqual(5, clone.Array[1]);
-            Assert.AreEqual(6, clone.Array[2]);
+            Assert.NotNull(clone!.Array);
+            Assert.Equal(3, clone.Array.Length);
+            Assert.Equal(99, clone.Array[0]);
+            Assert.Equal(5, clone.Array[1]);
+            Assert.Equal(6, clone.Array[2]);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropertyChangedTest()
         {
             var manager = new MockSettingsManager();
@@ -78,11 +77,11 @@ namespace Cogwheel.Tests
             manager.DateTime = DateTime.UtcNow;
 
             // Check if event raised correctly
-            Assert.IsNotNull(changedProperty);
-            Assert.AreEqual(nameof(manager.DateTime), changedProperty);
+            Assert.NotNull(changedProperty);
+            Assert.Equal(nameof(manager.DateTime), changedProperty);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropertyChangedDistinctTest()
         {
             var manager = new MockSettingsManager();
@@ -112,20 +111,20 @@ namespace Cogwheel.Tests
             manager.Enum = MockEnum.One;
 
             // Check if event was only raised the minimum number of times
-            Assert.AreEqual(2, triggerCount);
+            Assert.Equal(2, triggerCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveTest()
         {
             var manager = new MockSettingsManager();
 
             // Save
             manager.Save();
-            Assert.IsTrue(File.Exists(manager.FullFilePath));
+            Assert.True(File.Exists(manager.FullFilePath));
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveChangesTest()
         {
             var manager = new MockSettingsManager();
@@ -144,57 +143,57 @@ namespace Cogwheel.Tests
             manager.Load();
 
             // Check values
-            Assert.AreEqual(13, manager.Int);
-            Assert.AreEqual(3.14, manager.Double);
-            Assert.AreEqual("Hello World", manager.Str);
+            Assert.Equal(13, manager.Int);
+            Assert.Equal(3.14, manager.Double);
+            Assert.Equal("Hello World", manager.Str);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsSavedTest()
         {
             var manager = new MockSettingsManager();
 
             // IsSaved should be true because it's persistent (all values are default)
-            Assert.IsTrue(manager.IsSaved);
+            Assert.True(manager.IsSaved);
 
             // Change values
             manager.DateTime = DateTime.Now;
 
             // IsSaved should be false because a value was changed
-            Assert.IsFalse(manager.IsSaved);
+            Assert.False(manager.IsSaved);
 
             // Save
             manager.Save();
 
             // IsSaved should be true because the settings are saved
-            Assert.IsTrue(manager.IsSaved);
+            Assert.True(manager.IsSaved);
 
             // Change values
             manager.Int = 43;
 
             // IsSaved should be false because a value was changed
-            Assert.IsFalse(manager.IsSaved);
+            Assert.False(manager.IsSaved);
 
             // Load
             manager.Load();
 
             // IsSaved should be true because the settings are saved
-            Assert.IsTrue(manager.IsSaved);
+            Assert.True(manager.IsSaved);
 
             // Change values
             manager.Class = new MockClass();
 
             // IsSaved should be false because a value was changed
-            Assert.IsFalse(manager.IsSaved);
+            Assert.False(manager.IsSaved);
 
             // Reset
             manager.Reset();
 
             // IsSaved should be false because it's not persistent anymore
-            Assert.IsFalse(manager.IsSaved);
+            Assert.False(manager.IsSaved);
         }
 
-        [TestMethod]
+        [Fact]
         public void ResetTest()
         {
             var manager = new MockSettingsManager();
@@ -207,11 +206,11 @@ namespace Cogwheel.Tests
             manager.Reset();
 
             // Check values
-            Assert.AreEqual("Hello World", manager.Str);
-            Assert.AreEqual(MockEnum.Two, manager.Enum);
+            Assert.Equal("Hello World", manager.Str);
+            Assert.Equal(MockEnum.Two, manager.Enum);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteTest()
         {
             var manager = new MockSettingsManager();
@@ -221,10 +220,10 @@ namespace Cogwheel.Tests
 
             // Delete
             manager.Delete();
-            Assert.IsFalse(File.Exists(manager.FullFilePath));
+            Assert.False(File.Exists(manager.FullFilePath));
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteWithDirTest()
         {
             var manager = new MockSettingsManager();
@@ -234,11 +233,11 @@ namespace Cogwheel.Tests
 
             // Delete
             manager.Delete(true);
-            Assert.IsFalse(File.Exists(manager.FullFilePath));
-            Assert.IsFalse(Directory.Exists(manager.FullDirectoryPath));
+            Assert.False(File.Exists(manager.FullFilePath));
+            Assert.False(Directory.Exists(manager.FullDirectoryPath));
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveUpgradeLoadTest()
         {
             var oldManager = new MockSettingsManager();
@@ -258,14 +257,13 @@ namespace Cogwheel.Tests
             newManager.Load();
 
             // Check values
-            Assert.AreEqual(66.55, newManager.Double);
-            Assert.IsNotNull(newManager.Class);
-            Assert.AreEqual(132, newManager.Class!.Long);
-            Assert.AreEqual('Q', newManager.Char);
+            Assert.Equal(66.55, newManager.Double);
+            Assert.NotNull(newManager.Class);
+            Assert.Equal(132, newManager.Class!.Long);
+            Assert.Equal('Q', newManager.Char);
         }
 
-        [TestCleanup]
-        public void Cleanup()
+        public void Dispose()
         {
             var mock = new MockSettingsManager();
             try

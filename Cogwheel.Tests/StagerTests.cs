@@ -1,23 +1,22 @@
 ﻿using Cogwheel.Tests.Mocks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace Cogwheel.Tests
 {
-    [TestClass]
     public class StagerTests
     {
-        [TestMethod]
+        [Fact]
         public void InstantiateTest()
         {
             var stager = new Stager<MockSettingsManager>();
 
             // Make sure both instances exist and are not the same
-            Assert.IsNotNull(stager.Stable);
-            Assert.IsNotNull(stager.Dirty);
-            Assert.IsFalse(ReferenceEquals(stager.Stable, stager.Dirty));
+            Assert.NotNull(stager.Stable);
+            Assert.NotNull(stager.Dirty);
+            Assert.False(ReferenceEquals(stager.Stable, stager.Dirty));
         }
 
-        [TestMethod]
+        [Fact]
         public void InstantiateWithFactoryTest()
         {
             var stager = new Stager<MockSettingsManager>(
@@ -25,37 +24,37 @@ namespace Cogwheel.Tests
                 new MockSettingsManager {Int = 6969});
 
             // Make sure both instances exist and are not the same
-            Assert.IsNotNull(stager.Stable);
-            Assert.IsNotNull(stager.Dirty);
-            Assert.IsFalse(ReferenceEquals(stager.Stable, stager.Dirty));
+            Assert.NotNull(stager.Stable);
+            Assert.NotNull(stager.Dirty);
+            Assert.False(ReferenceEquals(stager.Stable, stager.Dirty));
 
             // Check if factory worked
-            Assert.AreEqual(1337, stager.Stable.Int);
-            Assert.AreEqual(6969, stager.Dirty.Int);
+            Assert.Equal(1337, stager.Stable.Int);
+            Assert.Equal(6969, stager.Dirty.Int);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveSyncTest()
         {
             var stager = new Stager<MockSettingsManager>();
 
             // Should be in sync
-            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.Equal(stager.Dirty.Str, stager.Stable.Str);
 
             // Change value
             stager.Dirty.Str = "553322";
 
             // Should not be in sync
-            Assert.AreNotEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.NotEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Save
             stager.Save();
 
             // Should be in sync
-            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.Equal(stager.Dirty.Str, stager.Stable.Str);
         }
 
-        [TestMethod]
+        [Fact]
         public void LoadSyncTest()
         {
             var stager = new Stager<MockSettingsManager>();
@@ -64,40 +63,40 @@ namespace Cogwheel.Tests
             stager.Save();
 
             // Should be in sync
-            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.Equal(stager.Dirty.Str, stager.Stable.Str);
 
             // Change value
             stager.Dirty.Str = "553322";
 
             // Should not be in sync
-            Assert.AreNotEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.NotEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Load
             stager.Load();
 
             // Should be in sync
-            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.Equal(stager.Dirty.Str, stager.Stable.Str);
         }
 
-        [TestMethod]
+        [Fact]
         public void RevertStagingSyncTest()
         {
             var stager = new Stager<MockSettingsManager>();
 
             // Should be in sync
-            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.Equal(stager.Dirty.Str, stager.Stable.Str);
 
             // Change value
             stager.Dirty.Str = "553322";
 
             // Should not be in sync
-            Assert.AreNotEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.NotEqual(stager.Dirty.Str, stager.Stable.Str);
 
             // Save
             stager.Save();
 
             // Should be in sync
-            Assert.AreEqual(stager.Dirty.Str, stager.Stable.Str);
+            Assert.Equal(stager.Dirty.Str, stager.Stable.Str);
         }
     }
 }
