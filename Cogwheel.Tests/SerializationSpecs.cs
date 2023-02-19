@@ -172,6 +172,26 @@ public class SerializationSpecs
         loadedSettings.Should().BeEquivalentTo(settings);
     }
 
+    [Fact(Skip = "STJ does not support default parameterized constructors in structs")]
+    public void I_can_define_a_setting_of_a_custom_immutable_struct_type()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithCustomImmutableStruct(file.Path)
+        {
+            CustomStructProperty = new FakeSettingsWithCustomImmutableStruct.CustomStruct(42, "foo")
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsWithCustomImmutableStruct(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings.Should().BeEquivalentTo(settings);
+    }
+
     [Fact]
     public void I_can_define_a_setting_of_a_custom_record_type()
     {
