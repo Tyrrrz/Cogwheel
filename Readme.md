@@ -11,7 +11,8 @@
 
 > 🟢 **Project status**: active<sup>[[?]](https://github.com/Tyrrrz/.github/blob/master/docs/project-status.md)</sup>
 
-My settings library
+**Cogwheel** (formerly [**Tyrrrz.Settings**](https://nuget.org/packages/Tyrrrz.Settings)) is a simple library for storing and retrieving settings in desktop applications.
+It serves as a replacement for the built-in `System.Configuration.SettingsBase` class, and offers more customization and flexibility.
 
 ## Terms of use<sup>[[?]](https://github.com/Tyrrrz/.github/blob/master/docs/why-so-political.md)</sup>
 
@@ -27,3 +28,70 @@ To learn more about the war and how you can help, [click here](https://tyrrrz.me
 ## Install
 
 - 📦 [NuGet](https://nuget.org/packages/Cogwheel): `dotnet add package Cogwheel`
+
+## Usage
+
+To define your own application settings, create a class that inherits from `SettingsBase`:
+
+```csharp
+using Cogwheel;
+
+public class MySettings : SettingsBase
+{
+    public string StringSetting { get; set; } = "foo";
+    
+    public int IntSetting { get; set; } = 42;
+    
+    public MySettings() : base("path/to/settings.json")
+    {
+    }
+}
+```
+
+Using an instance of this class, you can load, modify, and save settings:
+
+```csharp
+var settings = new MySettings();
+
+settings.Load();
+
+settings.StringSetting = "bar";
+settings.IntSetting = 1337;
+
+settings.Save();
+```
+
+You can also restore settings to their default values:
+
+```csharp
+var settings = new MySettings();
+
+settings.StringSetting = "bar";
+settings.IntSetting = 1337;
+
+settings.Reset();
+
+// settings.StringSetting == "foo"
+// settings.IntSetting == 42
+```
+
+Under the hood, **Cogwheel** uses [`System.Text.Json`](https://docs.microsoft.com/en-us/dotnet/api/system.text.json) to serialize and deserialize settings.
+You can use various attributes defined in that namespace to customize the serialization behavior:
+
+```csharp
+using Cogwheel;
+using System.Text.Json.Serialization;
+
+public class MySettings : SettingsBase
+{
+    [JsonPropertyName("string_setting")]
+    public string StringSetting { get; set; } = "foo";
+    
+    [JsonIgnore]
+    public int IntSetting { get; set; } = 42;
+    
+    public MySettings() : base("path/to/settings.json")
+    {
+    }
+}
+```
