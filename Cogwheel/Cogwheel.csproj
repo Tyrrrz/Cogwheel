@@ -7,8 +7,8 @@
 
   <PropertyGroup>
     <Authors>$(Company)</Authors>
-    <Description>JSON.Net-powered settings manager</Description>
-    <PackageTags>shell pipe command line executable interface wrapper standard input output error arguments net core</PackageTags>
+    <Description>Library for managing application settings</Description>
+    <PackageTags>settings json</PackageTags>
     <PackageProjectUrl>https://github.com/Tyrrrz/Cogwheel</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/Tyrrrz/Cogwheel/blob/master/Changelog.md</PackageReleaseNotes>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
@@ -28,11 +28,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
-    <PackageReference Include="PolySharp" Version="1.8.1" PrivateAssets="all" />
+    <PackageReference Include="PolySharp" Version="1.12.1" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="System.Text.Json" Version="7.0.0" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
 </Project>
