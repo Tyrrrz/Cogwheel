@@ -63,33 +63,24 @@ public abstract class SettingsBase
 
         writer.WriteStartObject();
 
-        // Write metadata
-        {
-            writer.WriteCommentValue($"Generated on {DateTimeOffset.Now:u}");
-
-            var entryAssembly = Assembly.GetEntryAssembly();
-            if (entryAssembly is not null)
-            {
-                writer.WriteCommentValue(
-                    $"{entryAssembly.GetName().Name} v{entryAssembly.GetName().Version}"
-                );
-            }
-
-            var thisAssembly = Assembly.GetExecutingAssembly();
-            writer.WriteCommentValue(
-                $"{thisAssembly.GetName().Name} v{thisAssembly.GetName().Version}"
-            );
-        }
-
-        // Write settings
         foreach (var property in _properties)
         {
+            var options = new JsonSerializerOptions();
+
+            // Use custom converter if set
+            if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
+                Activator.CreateInstance(converterType) is JsonConverter converter)
+            {
+                options.Converters.Add(converter);
+            }
+
             writer.WritePropertyName(
+                // Use custom name if set
                 property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ??
                 property.Name
             );
 
-            JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType);
+            JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType, options);
         }
 
         writer.WriteEndObject();
@@ -113,14 +104,27 @@ public abstract class SettingsBase
             foreach (var jsonProperty in document.RootElement.EnumerateObject())
             {
                 var property = _properties.FirstOrDefault(p => string.Equals(
+                    // Use custom name if set
                     p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? p.Name,
                     jsonProperty.Name,
                     StringComparison.Ordinal
                 ));
 
-                property?.SetValue(
+                if (property is null)
+                    continue;
+
+                var options = new JsonSerializerOptions();
+
+                // Use custom converter if set
+                if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
+                    Activator.CreateInstance(converterType) is JsonConverter converter)
+                {
+                    options.Converters.Add(converter);
+                }
+
+                property.SetValue(
                     this,
-                    JsonSerializer.Deserialize(jsonProperty.Value.GetRawText(), property.PropertyType)
+                    JsonSerializer.Deserialize(jsonProperty.Value.GetRawText(), property.PropertyType, options)
                 );
             }
 

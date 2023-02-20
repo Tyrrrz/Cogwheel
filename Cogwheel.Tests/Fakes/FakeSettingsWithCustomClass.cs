@@ -14,6 +14,7 @@ public partial class FakeSettingsWithCustomClass
     public class CustomClass
     {
         public int IntProperty { get; set; }
+
         public string? StringProperty { get; set; }
     }
 }

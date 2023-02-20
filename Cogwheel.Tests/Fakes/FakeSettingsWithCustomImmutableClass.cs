@@ -14,6 +14,7 @@ public partial class FakeSettingsWithCustomImmutableClass
     public class CustomClass
     {
         public int IntProperty { get; }
+
         public string StringProperty { get; }
 
         public CustomClass(int intProperty, string stringProperty)

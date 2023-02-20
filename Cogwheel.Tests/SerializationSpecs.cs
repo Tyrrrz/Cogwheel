@@ -233,6 +233,29 @@ public class SerializationSpecs
     }
 
     [Fact]
+    public void I_can_define_a_setting_that_gets_serialized_using_a_custom_converter()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithCustomConverterProperty(file.Path)
+        {
+            ConvertibleProperty = new FakeSettingsWithCustomConverterProperty.MyClass
+            {
+                Foo = "bar"
+            }
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsWithCustomConverterProperty(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings.Should().BeEquivalentTo(settings);
+    }
+
+    [Fact]
     public void I_can_define_a_setting_that_does_not_get_serialized()
     {
         // Arrange

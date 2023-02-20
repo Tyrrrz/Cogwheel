@@ -14,6 +14,7 @@ public partial class FakeSettingsWithCustomImmutableStruct
     public readonly struct CustomStruct
     {
         public int IntProperty { get; }
+
         public string StringProperty { get; }
 
         public CustomStruct(int intProperty, string stringProperty)
