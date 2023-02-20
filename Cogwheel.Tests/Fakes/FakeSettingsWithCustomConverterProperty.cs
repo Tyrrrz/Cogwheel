@@ -30,36 +30,27 @@ public partial class FakeSettingsWithCustomConverterProperty
     {
         public override MyClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string? foo = null;
+            MyClass? result = null;
 
-            if (reader.TokenType != JsonTokenType.StartObject)
-                return null;
-
-            while (reader.Read())
+            if (reader.TokenType == JsonTokenType.StartObject)
             {
-                if (reader.TokenType == JsonTokenType.EndObject)
-                    break;
-
-                if (reader.TokenType != JsonTokenType.PropertyName)
-                    continue;
-
-                var propertyName = reader.GetString();
-                if (propertyName is null)
-                    continue;
-
-                reader.Read();
-
-                switch (propertyName)
+                while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
                 {
-                    case "xyz":
-                        foo = reader.GetString();
-                        break;
+                    if (reader.TokenType == JsonTokenType.PropertyName &&
+                        reader.GetString() == "xyz" &&
+                        reader.Read() &&
+                        reader.TokenType == JsonTokenType.String)
+                    {
+                        var foo = reader.GetString();
+                        result = new MyClass
+                        {
+                            Foo = foo
+                        };
+                    }
                 }
             }
 
-            return foo is not null
-                ? new MyClass { Foo = foo }
-                : null;
+            return result;
         }
 
         public override void Write(Utf8JsonWriter writer, MyClass value, JsonSerializerOptions options)
