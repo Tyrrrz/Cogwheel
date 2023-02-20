@@ -6,8 +6,8 @@ namespace Cogwheel.Tests.Fakes;
 
 public partial class FakeSettingsWithCustomConverterProperty : SettingsBase
 {
-    [JsonConverter(typeof(MyJsonConverter))]
-    public MyClass? ConvertibleProperty { get; set; }
+    [JsonConverter(typeof(CustomJsonConverter))]
+    public CustomClass? CustomConverterProperty { get; set; }
 
     public FakeSettingsWithCustomConverterProperty(string filePath) : base(filePath)
     {
@@ -16,7 +16,7 @@ public partial class FakeSettingsWithCustomConverterProperty : SettingsBase
 
 public partial class FakeSettingsWithCustomConverterProperty
 {
-    public class MyClass
+    public class CustomClass
     {
         // Using an internal setter here ensures that the property is not
         // settable without using a custom converter.
@@ -26,11 +26,11 @@ public partial class FakeSettingsWithCustomConverterProperty
 
 public partial class FakeSettingsWithCustomConverterProperty
 {
-    private class MyJsonConverter : JsonConverter<MyClass>
+    private class CustomJsonConverter : JsonConverter<CustomClass>
     {
-        public override MyClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override CustomClass? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            MyClass? result = null;
+            CustomClass? result = null;
 
             if (reader.TokenType == JsonTokenType.StartObject)
             {
@@ -42,7 +42,7 @@ public partial class FakeSettingsWithCustomConverterProperty
                         reader.TokenType == JsonTokenType.String)
                     {
                         var foo = reader.GetString();
-                        result = new MyClass
+                        result = new CustomClass
                         {
                             Foo = foo
                         };
@@ -53,7 +53,7 @@ public partial class FakeSettingsWithCustomConverterProperty
             return result;
         }
 
-        public override void Write(Utf8JsonWriter writer, MyClass value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, CustomClass value, JsonSerializerOptions options)
         {
             writer.WriteStartObject();
             writer.WriteString("xyz", value.Foo);

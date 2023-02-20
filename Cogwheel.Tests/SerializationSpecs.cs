@@ -129,6 +129,26 @@ public class SerializationSpecs
     }
 
     [Fact]
+    public void I_can_define_a_setting_of_a_custom_enum_type()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithCustomEnum(file.Path)
+        {
+            CustomEnumProperty = FakeSettingsWithCustomEnum.CustomEnum.Bar
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsWithCustomEnum(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings.Should().BeEquivalentTo(settings);
+    }
+
+    [Fact]
     public void I_can_define_a_setting_of_a_custom_class_type()
     {
         // Arrange
@@ -213,6 +233,26 @@ public class SerializationSpecs
     }
 
     [Fact]
+    public void I_can_define_a_setting_of_a_custom_struct_record_type()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithCustomStructRecord(file.Path)
+        {
+            CustomRecordProperty = new FakeSettingsWithCustomStructRecord.CustomRecord(42, "foo")
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsWithCustomStructRecord(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings.Should().BeEquivalentTo(settings);
+    }
+
+    [Fact]
     public void I_can_define_a_setting_that_gets_serialized_using_a_custom_name()
     {
         // Arrange
@@ -239,7 +279,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomConverterProperty(file.Path)
         {
-            ConvertibleProperty = new FakeSettingsWithCustomConverterProperty.MyClass
+            CustomConverterProperty = new FakeSettingsWithCustomConverterProperty.CustomClass
             {
                 Foo = "bar"
             }
