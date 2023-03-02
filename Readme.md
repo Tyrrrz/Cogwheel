@@ -12,7 +12,7 @@
 > 🟢 **Project status**: active<sup>[[?]](https://github.com/Tyrrrz/.github/blob/master/docs/project-status.md)</sup>
 
 **Cogwheel** (formerly [**Tyrrrz.Settings**](https://nuget.org/packages/Tyrrrz.Settings)) is a simple library for storing and retrieving settings in desktop applications.
-It serves as a replacement for the built-in `System.Configuration.SettingsBase` class, and offers more customization and flexibility.
+It serves as a replacement for the built-in [`System.Configuration.SettingsBase`](https://learn.microsoft.com/en-us/dotnet/api/system.configuration.settingsbase) class, and offers more customization and flexibility.
 
 ## Terms of use<sup>[[?]](https://github.com/Tyrrrz/.github/blob/master/docs/why-so-political.md)</sup>
 
@@ -39,9 +39,9 @@ using Cogwheel;
 public class MySettings : SettingsBase
 {
     public string StringSetting { get; set; } = "foo";
-    
+
     public int IntSetting { get; set; } = 42;
-    
+
     public MySettings() : base("path/to/settings.json")
     {
     }
@@ -86,10 +86,10 @@ public class MySettings : SettingsBase
 {
     [JsonPropertyName("string_setting")]
     public string StringSetting { get; set; } = "foo";
-    
+
     [JsonIgnore]
     public int IntSetting { get; set; } = 42;
-    
+
     public MySettings() : base("path/to/settings.json")
     {
     }
