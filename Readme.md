@@ -11,6 +11,10 @@
 
 > 🟢 **Project status**: active<sup>[[?]](https://github.com/Tyrrrz/.github/blob/master/docs/project-status.md)</sup>
 
+<p align="center">
+    <img src="favicon.png" alt="Icon" />
+</p>
+
 **Cogwheel** (formerly [**Tyrrrz.Settings**](https://nuget.org/packages/Tyrrrz.Settings)) is a simple library for storing and retrieving settings in desktop applications.
 It serves as a replacement for the built-in [`System.Configuration.SettingsBase`](https://learn.microsoft.com/en-us/dotnet/api/system.configuration.settingsbase) class, and offers more customization and flexibility.
 
