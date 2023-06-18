@@ -51,46 +51,50 @@ public abstract class SettingsBase
     /// </summary>
     public virtual void Save()
     {
+        byte[] Serialize()
+        {
+            using var stream = new MemoryStream();
+            using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
+            {
+                Indented = true
+            });
+
+            writer.WriteStartObject();
+
+            foreach (var property in _properties)
+            {
+                var options = new JsonSerializerOptions();
+
+                // Use custom converter if set
+                if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
+                    Activator.CreateInstance(converterType) is JsonConverter converter)
+                {
+                    options.Converters.Add(converter);
+                }
+
+                writer.WritePropertyName(
+                    // Use custom name if set
+                    property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ??
+                    property.Name
+                );
+
+                JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType, options);
+            }
+
+            writer.WriteEndObject();
+            writer.Flush();
+
+            return stream.ToArray();
+        }
+
+        // Write to memory first, so that we don't end up producing a corrupted file in case of an error
+        var data = Serialize();
+
         var dirPath = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrWhiteSpace(dirPath))
             Directory.CreateDirectory(dirPath);
 
-        // Write to memory first, so that we don't end up producing a corrupted file in case of an error
-        using var bufferStream = new MemoryStream();
-        using var writer = new Utf8JsonWriter(bufferStream, new JsonWriterOptions
-        {
-            Indented = true
-        });
-
-        writer.WriteStartObject();
-
-        foreach (var property in _properties)
-        {
-            var options = new JsonSerializerOptions();
-
-            // Use custom converter if set
-            if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
-                Activator.CreateInstance(converterType) is JsonConverter converter)
-            {
-                options.Converters.Add(converter);
-            }
-
-            writer.WritePropertyName(
-                // Use custom name if set
-                property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ??
-                property.Name
-            );
-
-            JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType, options);
-        }
-
-        writer.WriteEndObject();
-        writer.Flush();
-
-        // Copy to file
-        using var fileStream = File.Create(_filePath);
-        bufferStream.Position = 0;
-        bufferStream.CopyTo(fileStream);
+        File.WriteAllBytes(_filePath, data);
     }
 
     /// <summary>
