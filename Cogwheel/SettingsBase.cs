@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Cogwheel.Utils;
 
 namespace Cogwheel;
 
@@ -56,47 +55,42 @@ public abstract class SettingsBase
         if (!string.IsNullOrWhiteSpace(dirPath))
             Directory.CreateDirectory(dirPath);
 
-        try
+        // Write to memory first, so that we don't end up producing a corrupted file in case of an error
+        using var bufferStream = new MemoryStream();
+        using var writer = new Utf8JsonWriter(bufferStream, new JsonWriterOptions
         {
-            using var stream = File.Create(_filePath);
-            using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
+            Indented = true
+        });
+
+        writer.WriteStartObject();
+
+        foreach (var property in _properties)
+        {
+            var options = new JsonSerializerOptions();
+
+            // Use custom converter if set
+            if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
+                Activator.CreateInstance(converterType) is JsonConverter converter)
             {
-                Indented = true
-            });
-
-            writer.WriteStartObject();
-
-            foreach (var property in _properties)
-            {
-                var options = new JsonSerializerOptions();
-
-                // Use custom converter if set
-                if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
-                    Activator.CreateInstance(converterType) is JsonConverter converter)
-                {
-                    options.Converters.Add(converter);
-                }
-
-                writer.WritePropertyName(
-                    // Use custom name if set
-                    property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ??
-                    property.Name
-                );
-
-                JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType, options);
+                options.Converters.Add(converter);
             }
 
-            writer.WriteEndObject();
-        }
-        catch
-        {
-            // If the exception happened while writing the settings file, then it's very likely
-            // that it is is now corrupted. We need to delete the file, so that subsequent calls
-            // to Load() don't throw cryptic JSON-parsing exceptions.
-            FileEx.TryDelete(_filePath);
+            writer.WritePropertyName(
+                // Use custom name if set
+                property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ??
+                property.Name
+            );
 
-            throw;
+            JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType, options);
         }
+
+        writer.WriteEndObject();
+        writer.Flush();
+
+        // Copy to file
+        using var fileStream = File.Create(_filePath);
+        bufferStream.Position = 0;
+        bufferStream.CopyTo(fileStream);
     }
 
     /// <summary>
