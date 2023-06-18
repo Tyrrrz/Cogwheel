@@ -279,11 +279,10 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomConverterProperty(file.Path)
         {
-            CustomConverterProperty = new FakeSettingsWithCustomConverterProperty.CustomClass
-            {
-                Foo = "bar"
-            }
+            CustomConverterProperty = new FakeSettingsWithCustomConverterProperty.CustomClass()
         };
+
+        settings.CustomConverterProperty.Set("foo");
 
         // Act
         settings.Save();

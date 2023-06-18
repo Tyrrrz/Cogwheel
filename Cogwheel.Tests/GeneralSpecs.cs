@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Cogwheel.Tests.Fakes;
 using Cogwheel.Tests.Utils;
 using FluentAssertions;
@@ -23,7 +24,7 @@ public class GeneralSpecs
     }
 
     [Fact]
-    public void I_can_load_saved_settings()
+    public void I_can_load_settings()
     {
         // Arrange
         using var file = TempFile.Create();
@@ -47,11 +48,34 @@ public class GeneralSpecs
     }
 
     [Fact]
-    public void I_can_attempt_to_load_saved_settings_and_not_get_an_error_if_they_were_not_saved()
+    public void I_can_try_to_load_settings_and_not_get_an_error_if_they_were_not_previously_saved()
     {
         // Arrange
         using var file = TempFile.Create();
         var settings = new FakeSettings(file.Path);
+
+        // Act
+        var wasLoaded = settings.Load();
+
+        // Assert
+        wasLoaded.Should().BeFalse();
+    }
+
+    [Fact]
+    public void I_can_try_to_load_settings_and_not_get_an_error_if_the_previous_save_operation_failed()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithUnserializableProperty(file.Path)
+        {
+            UnserializableProperty = new FakeSettingsWithUnserializableProperty.CustomClass
+            {
+                Foo = "bar"
+            }
+        };
+
+        // This is intended to fail and produce a corrupted file
+        Assert.ThrowsAny<Exception>(() => settings.Save());
 
         // Act
         var wasLoaded = settings.Load();
@@ -81,7 +105,7 @@ public class GeneralSpecs
     }
 
     [Fact]
-    public void I_can_delete_saved_settings()
+    public void I_can_delete_settings()
     {
         // Arrange
         using var file = TempFile.Create();
@@ -98,7 +122,7 @@ public class GeneralSpecs
     }
 
     [Fact]
-    public void I_can_attempt_to_delete_saved_settings_and_not_get_an_error_if_they_were_not_saved()
+    public void I_can_try_to_delete_settings_and_not_get_an_error_if_they_were_not_previously_saved()
     {
         // Arrange
         using var file = TempFile.Create();
