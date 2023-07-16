@@ -1,6 +1,6 @@
 # Cogwheel
 
-[![Status](https://img.shields.io/badge/status-maintenance-ffd700.svg)](https://github.com/Tyrrrz/.github/blob/master/docs/project-status.md)
+[![Status](https://img.shields.io/badge/status-active-47c219.svg)](https://github.com/Tyrrrz/.github/blob/master/docs/project-status.md)
 [![Made in Ukraine](https://img.shields.io/badge/made_in-ukraine-ffd700.svg?labelColor=0057b7)](https://tyrrrz.me/ukraine)
 [![Build](https://img.shields.io/github/actions/workflow/status/Tyrrrz/Cogwheel/main.yml?branch=master)](https://github.com/Tyrrrz/Cogwheel/actions)
 [![Coverage](https://img.shields.io/codecov/c/github/Tyrrrz/Cogwheel/master)](https://codecov.io/gh/Tyrrrz/Cogwheel)
