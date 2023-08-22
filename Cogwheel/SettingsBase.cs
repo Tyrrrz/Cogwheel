@@ -54,10 +54,10 @@ public abstract class SettingsBase
         byte[] Serialize()
         {
             using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
-            {
-                Indented = true
-            });
+            using var writer = new Utf8JsonWriter(
+                stream,
+                new JsonWriterOptions { Indented = true }
+            );
 
             writer.WriteStartObject();
 
@@ -66,19 +66,26 @@ public abstract class SettingsBase
                 var options = new JsonSerializerOptions();
 
                 // Use custom converter if set
-                if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
-                    Activator.CreateInstance(converterType) is JsonConverter converter)
+                if (
+                    property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType
+                        is { } converterType
+                    && Activator.CreateInstance(converterType) is JsonConverter converter
+                )
                 {
                     options.Converters.Add(converter);
                 }
 
                 writer.WritePropertyName(
                     // Use custom name if set
-                    property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ??
-                    property.Name
+                    property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? property.Name
                 );
 
-                JsonSerializer.Serialize(writer, property.GetValue(this), property.PropertyType, options);
+                JsonSerializer.Serialize(
+                    writer,
+                    property.GetValue(this),
+                    property.PropertyType,
+                    options
+                );
             }
 
             writer.WriteEndObject();
@@ -106,20 +113,26 @@ public abstract class SettingsBase
         try
         {
             using var stream = File.OpenRead(_filePath);
-            using var document = JsonDocument.Parse(stream, new JsonDocumentOptions
-            {
-                AllowTrailingCommas = true,
-                CommentHandling = JsonCommentHandling.Skip
-            });
+            using var document = JsonDocument.Parse(
+                stream,
+                new JsonDocumentOptions
+                {
+                    AllowTrailingCommas = true,
+                    CommentHandling = JsonCommentHandling.Skip
+                }
+            );
 
             foreach (var jsonProperty in document.RootElement.EnumerateObject())
             {
-                var property = _properties.FirstOrDefault(p => string.Equals(
-                    // Use custom name if set
-                    p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? p.Name,
-                    jsonProperty.Name,
-                    StringComparison.Ordinal
-                ));
+                var property = _properties.FirstOrDefault(
+                    p =>
+                        string.Equals(
+                            // Use custom name if set
+                            p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? p.Name,
+                            jsonProperty.Name,
+                            StringComparison.Ordinal
+                        )
+                );
 
                 if (property is null)
                     continue;
@@ -127,15 +140,22 @@ public abstract class SettingsBase
                 var options = new JsonSerializerOptions();
 
                 // Use custom converter if set
-                if (property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType &&
-                    Activator.CreateInstance(converterType) is JsonConverter converter)
+                if (
+                    property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType
+                        is { } converterType
+                    && Activator.CreateInstance(converterType) is JsonConverter converter
+                )
                 {
                     options.Converters.Add(converter);
                 }
 
                 property.SetValue(
                     this,
-                    JsonSerializer.Deserialize(jsonProperty.Value.GetRawText(), property.PropertyType, options)
+                    JsonSerializer.Deserialize(
+                        jsonProperty.Value.GetRawText(),
+                        property.PropertyType,
+                        options
+                    )
                 );
             }
 

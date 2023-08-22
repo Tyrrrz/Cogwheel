@@ -4,9 +4,8 @@ public partial class FakeSettingsWithCustomImmutableClass : SettingsBase
 {
     public CustomClass? CustomClassProperty { get; set; }
 
-    public FakeSettingsWithCustomImmutableClass(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithCustomImmutableClass(string filePath)
+        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomImmutableClass

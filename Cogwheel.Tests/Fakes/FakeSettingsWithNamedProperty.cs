@@ -7,7 +7,6 @@ public class FakeSettingsWithNamedProperty : SettingsBase
     [JsonPropertyName("foo")]
     public int IntProperty { get; set; }
 
-    public FakeSettingsWithNamedProperty(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithNamedProperty(string filePath)
+        : base(filePath) { }
 }

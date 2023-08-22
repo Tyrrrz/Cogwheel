@@ -6,7 +6,6 @@ public class FakeSettingsWithTimeSpan : SettingsBase
 {
     public TimeSpan TimeSpanProperty { get; set; }
 
-    public FakeSettingsWithTimeSpan(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithTimeSpan(string filePath)
+        : base(filePath) { }
 }

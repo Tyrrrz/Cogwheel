@@ -10,7 +10,6 @@ internal class FakeSettings : SettingsBase
 
     public string? StringPropertyWithDefaultValue { get; set; } = "Default value";
 
-    public FakeSettings(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettings(string filePath)
+        : base(filePath) { }
 }

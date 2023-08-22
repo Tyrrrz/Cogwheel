@@ -9,9 +9,8 @@ public partial class FakeSettingsWithCustomConverterProperty : SettingsBase
     [JsonConverter(typeof(CustomJsonConverter))]
     public CustomClass? CustomConverterProperty { get; set; }
 
-    public FakeSettingsWithCustomConverterProperty(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithCustomConverterProperty(string filePath)
+        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomConverterProperty
@@ -33,13 +32,12 @@ public partial class FakeSettingsWithCustomConverterProperty
         public override CustomClass Read(
             ref Utf8JsonReader reader,
             Type typeToConvert,
-            JsonSerializerOptions options)
+            JsonSerializerOptions options
+        )
         {
             var result = new CustomClass();
 
-            result.Set(
-                reader.GetString()
-            );
+            result.Set(reader.GetString());
 
             return result;
         }
@@ -47,6 +45,7 @@ public partial class FakeSettingsWithCustomConverterProperty
         public override void Write(
             Utf8JsonWriter writer,
             CustomClass value,
-            JsonSerializerOptions options) => writer.WriteStringValue(value.Value);
+            JsonSerializerOptions options
+        ) => writer.WriteStringValue(value.Value);
     }
 }

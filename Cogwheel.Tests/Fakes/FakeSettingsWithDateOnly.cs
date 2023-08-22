@@ -6,7 +6,6 @@ public class FakeSettingsWithDateOnly : SettingsBase
 {
     public DateOnly DateOnlyProperty { get; set; }
 
-    public FakeSettingsWithDateOnly(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithDateOnly(string filePath)
+        : base(filePath) { }
 }

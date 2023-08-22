@@ -13,10 +13,7 @@ public class SerializationSpecs
     {
         // Arrange
         using var file = TempFile.Create();
-        var settings = new FakeSettingsWithNullableValue(file.Path)
-        {
-            NullableIntProperty = 42
-        };
+        var settings = new FakeSettingsWithNullableValue(file.Path) { NullableIntProperty = 42 };
 
         // Act
         settings.Save();
@@ -33,10 +30,7 @@ public class SerializationSpecs
     {
         // Arrange
         using var file = TempFile.Create();
-        var settings = new FakeSettingsWithNullableValue(file.Path)
-        {
-            NullableIntProperty = null
-        };
+        var settings = new FakeSettingsWithNullableValue(file.Path) { NullableIntProperty = null };
 
         // Act
         settings.Save();
@@ -55,7 +49,15 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithDateTimeOffset(file.Path)
         {
-            DateTimeOffsetProperty = new DateTimeOffset(2023, 04, 28, 13, 37, 00, TimeSpan.FromHours(+2))
+            DateTimeOffsetProperty = new DateTimeOffset(
+                2023,
+                04,
+                28,
+                13,
+                37,
+                00,
+                TimeSpan.FromHours(+2)
+            )
         };
 
         // Act
@@ -257,10 +259,7 @@ public class SerializationSpecs
     {
         // Arrange
         using var file = TempFile.Create();
-        var settings = new FakeSettingsWithNamedProperty(file.Path)
-        {
-            IntProperty = 42
-        };
+        var settings = new FakeSettingsWithNamedProperty(file.Path) { IntProperty = 42 };
 
         // Act
         settings.Save();

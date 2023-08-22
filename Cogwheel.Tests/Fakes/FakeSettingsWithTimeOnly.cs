@@ -6,7 +6,6 @@ public class FakeSettingsWithTimeOnly : SettingsBase
 {
     public TimeOnly TimeOnlyProperty { get; set; }
 
-    public FakeSettingsWithTimeOnly(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithTimeOnly(string filePath)
+        : base(filePath) { }
 }

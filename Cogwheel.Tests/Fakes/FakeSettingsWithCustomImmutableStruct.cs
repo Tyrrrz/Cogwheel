@@ -1,12 +1,11 @@
 ﻿namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithCustomImmutableStruct: SettingsBase
+public partial class FakeSettingsWithCustomImmutableStruct : SettingsBase
 {
     public CustomStruct? CustomStructProperty { get; set; }
 
-    public FakeSettingsWithCustomImmutableStruct(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithCustomImmutableStruct(string filePath)
+        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomImmutableStruct

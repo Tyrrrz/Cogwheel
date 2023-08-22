@@ -9,7 +9,6 @@ public class FakeSettingsWithIgnoredProperty : SettingsBase
     [JsonIgnore]
     public string? IgnoredProperty { get; set; }
 
-    public FakeSettingsWithIgnoredProperty(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithIgnoredProperty(string filePath)
+        : base(filePath) { }
 }

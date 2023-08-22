@@ -4,9 +4,8 @@ public partial class FakeSettingsWithCustomStructRecord : SettingsBase
 {
     public CustomRecord CustomRecordProperty { get; set; }
 
-    public FakeSettingsWithCustomStructRecord(string filePath) : base(filePath)
-    {
-    }
+    public FakeSettingsWithCustomStructRecord(string filePath)
+        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomStructRecord
