@@ -14,6 +14,7 @@ namespace Cogwheel;
 public abstract class SettingsBase
 {
     private readonly string _filePath;
+    private readonly JsonSerializerOptions _jsonOptions;
 
     private readonly IReadOnlyList<PropertyInfo> _properties;
     private readonly IReadOnlyDictionary<PropertyInfo, object?> _defaults;
@@ -21,9 +22,10 @@ public abstract class SettingsBase
     /// <summary>
     /// Initializes an instance of <see cref="SettingsBase" />.
     /// </summary>
-    protected SettingsBase(string filePath)
+    protected SettingsBase(string filePath, JsonSerializerOptions jsonOptions)
     {
         _filePath = filePath;
+        _jsonOptions = jsonOptions;
 
         _properties = GetType()
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
@@ -36,6 +38,12 @@ public abstract class SettingsBase
         // so we can safely retrieve them here.
         _defaults = _properties.ToDictionary(p => p, p => p.GetValue(this));
     }
+
+    /// <summary>
+    /// Initializes an instance of <see cref="SettingsBase" />.
+    /// </summary>
+    protected SettingsBase(string filePath)
+        : this(filePath, new JsonSerializerOptions { WriteIndented = true }) { }
 
     /// <summary>
     /// Resets the settings to their default values.
@@ -51,51 +59,8 @@ public abstract class SettingsBase
     /// </summary>
     public virtual void Save()
     {
-        byte[] Serialize()
-        {
-            using var stream = new MemoryStream();
-            using var writer = new Utf8JsonWriter(
-                stream,
-                new JsonWriterOptions { Indented = true }
-            );
-
-            writer.WriteStartObject();
-
-            foreach (var property in _properties)
-            {
-                var options = new JsonSerializerOptions();
-
-                // Use custom converter if set
-                if (
-                    property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType
-                        is { } converterType
-                    && Activator.CreateInstance(converterType) is JsonConverter converter
-                )
-                {
-                    options.Converters.Add(converter);
-                }
-
-                writer.WritePropertyName(
-                    // Use custom name if set
-                    property.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? property.Name
-                );
-
-                JsonSerializer.Serialize(
-                    writer,
-                    property.GetValue(this),
-                    property.PropertyType,
-                    options
-                );
-            }
-
-            writer.WriteEndObject();
-            writer.Flush();
-
-            return stream.ToArray();
-        }
-
         // Write to memory first, so that we don't end up producing a corrupted file in case of an error
-        var data = Serialize();
+        var data = JsonSerializer.SerializeToUtf8Bytes(this, GetType(), _jsonOptions);
 
         var dirPath = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrWhiteSpace(dirPath))
@@ -122,6 +87,7 @@ public abstract class SettingsBase
                 }
             );
 
+            // This mess is required because System.Text.Json cannot populate an existing object
             foreach (var jsonProperty in document.RootElement.EnumerateObject())
             {
                 var property = _properties.FirstOrDefault(
@@ -137,7 +103,7 @@ public abstract class SettingsBase
                 if (property is null)
                     continue;
 
-                var options = new JsonSerializerOptions();
+                var jsonOptions = new JsonSerializerOptions(_jsonOptions);
 
                 // Use custom converter if set
                 if (
@@ -146,7 +112,7 @@ public abstract class SettingsBase
                     && Activator.CreateInstance(converterType) is JsonConverter converter
                 )
                 {
-                    options.Converters.Add(converter);
+                    jsonOptions.Converters.Add(converter);
                 }
 
                 property.SetValue(
@@ -154,7 +120,7 @@ public abstract class SettingsBase
                     JsonSerializer.Deserialize(
                         jsonProperty.Value.GetRawText(),
                         property.PropertyType,
-                        options
+                        jsonOptions
                     )
                 );
             }

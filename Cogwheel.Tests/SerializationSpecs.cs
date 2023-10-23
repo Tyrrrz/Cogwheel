@@ -294,6 +294,28 @@ public class SerializationSpecs
     }
 
     [Fact]
+    public void I_can_define_a_setting_that_gets_serialized_using_a_source_generator()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithSourceGeneration(file.Path)
+        {
+            IntProperty = 42,
+            BoolProperty = true,
+            StringProperty = "foo"
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsWithSourceGeneration(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings.Should().BeEquivalentTo(settings);
+    }
+
+    [Fact]
     public void I_can_define_a_setting_that_does_not_get_serialized()
     {
         // Arrange
