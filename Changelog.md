@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.4 (26-Oct-2023)
+
+- Added a constructor overload for `SettingsBase` that accepts an instance of `JsonSerializerOptions`. Among other things, this lets you provide a custom `IJsonTypeInfoResolver` for compile-time serialization.
+
 ## v2.0.3 (18-Jun-2023)
 
 - Fixed an issue where calling `Save()` would leave behind a corrupted file if the underlying serialization process failed. This was most often evident in the form of cryptic parsing-related exceptions on subsequent calls to `Load()`. Now, `Save()` will not create a file if an error occurs during serialization.
