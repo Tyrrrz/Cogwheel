@@ -1,5 +1,9 @@
 # Changelog
 
+> **Important**:
+> This changelog is no longer maintained and will be removed in the future.
+> Going forward, new versions of this package will have the corresponding release notes published on [GitHub Releases](https://githu.com/Tyrrrz/Cogwheel/releases).
+
 ## v2.0.4 (26-Oct-2023)
 
 - Added a constructor overload for `SettingsBase` that accepts an instance of `JsonSerializerOptions`. Among other things, this lets you provide a custom `IJsonTypeInfoResolver` for compile-time serialization.

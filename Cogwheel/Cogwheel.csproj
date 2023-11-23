@@ -10,7 +10,7 @@
     <Description>Library for managing application settings</Description>
     <PackageTags>settings json</PackageTags>
     <PackageProjectUrl>https://github.com/Tyrrrz/Cogwheel</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/Tyrrrz/Cogwheel/blob/master/Changelog.md</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/Tyrrrz/Cogwheel/releases/tag/$(Version)</PackageReleaseNotes>
     <PackageIcon>favicon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
