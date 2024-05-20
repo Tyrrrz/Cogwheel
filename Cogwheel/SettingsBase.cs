@@ -30,7 +30,7 @@ public abstract class SettingsBase
         _properties = GetType()
             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Where(p => p.DeclaringType != typeof(SettingsBase))
-            .Where(p => p.CanRead && p.CanWrite)
+            .Where(p => p is { CanRead: true, CanWrite: true })
             .Where(p => p.GetCustomAttribute<JsonIgnoreAttribute>() is null)
             .ToArray();
 
