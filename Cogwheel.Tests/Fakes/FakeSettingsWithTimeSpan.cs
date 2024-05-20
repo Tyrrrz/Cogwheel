@@ -2,10 +2,7 @@
 
 namespace Cogwheel.Tests.Fakes;
 
-public class FakeSettingsWithTimeSpan : SettingsBase
+public class FakeSettingsWithTimeSpan(string filePath) : SettingsBase(filePath)
 {
     public TimeSpan TimeSpanProperty { get; set; }
-
-    public FakeSettingsWithTimeSpan(string filePath)
-        : base(filePath) { }
 }

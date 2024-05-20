@@ -2,10 +2,7 @@
 
 namespace Cogwheel.Tests.Fakes;
 
-public class FakeSettingsWithDateTimeOffset : SettingsBase
+public class FakeSettingsWithDateTimeOffset(string filePath) : SettingsBase(filePath)
 {
     public DateTimeOffset DateTimeOffsetProperty { get; set; }
-
-    public FakeSettingsWithDateTimeOffset(string filePath)
-        : base(filePath) { }
 }

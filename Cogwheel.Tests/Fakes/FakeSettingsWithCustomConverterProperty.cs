@@ -4,13 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithCustomConverterProperty : SettingsBase
+public partial class FakeSettingsWithCustomConverterProperty(string filePath)
+    : SettingsBase(filePath)
 {
     [JsonConverter(typeof(CustomJsonConverter))]
     public CustomClass? CustomConverterProperty { get; set; }
-
-    public FakeSettingsWithCustomConverterProperty(string filePath)
-        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomConverterProperty

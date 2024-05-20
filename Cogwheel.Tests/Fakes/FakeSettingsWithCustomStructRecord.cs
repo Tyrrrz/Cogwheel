@@ -1,11 +1,8 @@
 ﻿namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithCustomStructRecord : SettingsBase
+public partial class FakeSettingsWithCustomStructRecord(string filePath) : SettingsBase(filePath)
 {
     public CustomRecord CustomRecordProperty { get; set; }
-
-    public FakeSettingsWithCustomStructRecord(string filePath)
-        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomStructRecord

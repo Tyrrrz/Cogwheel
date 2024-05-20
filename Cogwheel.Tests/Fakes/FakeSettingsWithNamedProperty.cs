@@ -2,11 +2,8 @@
 
 namespace Cogwheel.Tests.Fakes;
 
-public class FakeSettingsWithNamedProperty : SettingsBase
+public class FakeSettingsWithNamedProperty(string filePath) : SettingsBase(filePath)
 {
     [JsonPropertyName("foo")]
     public int IntProperty { get; set; }
-
-    public FakeSettingsWithNamedProperty(string filePath)
-        : base(filePath) { }
 }

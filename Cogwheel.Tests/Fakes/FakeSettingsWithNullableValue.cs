@@ -1,9 +1,6 @@
 ﻿namespace Cogwheel.Tests.Fakes;
 
-internal class FakeSettingsWithNullableValue : SettingsBase
+internal class FakeSettingsWithNullableValue(string filePath) : SettingsBase(filePath)
 {
     public int? NullableIntProperty { get; set; }
-
-    public FakeSettingsWithNullableValue(string filePath)
-        : base(filePath) { }
 }

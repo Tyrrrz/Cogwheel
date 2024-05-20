@@ -1,25 +1,16 @@
 ﻿namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithCustomImmutableClass : SettingsBase
+public partial class FakeSettingsWithCustomImmutableClass(string filePath) : SettingsBase(filePath)
 {
     public CustomClass? CustomClassProperty { get; set; }
-
-    public FakeSettingsWithCustomImmutableClass(string filePath)
-        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomImmutableClass
 {
-    public class CustomClass
+    public class CustomClass(int intProperty, string stringProperty)
     {
-        public int IntProperty { get; }
+        public int IntProperty { get; } = intProperty;
 
-        public string StringProperty { get; }
-
-        public CustomClass(int intProperty, string stringProperty)
-        {
-            IntProperty = intProperty;
-            StringProperty = stringProperty;
-        }
+        public string StringProperty { get; } = stringProperty;
     }
 }

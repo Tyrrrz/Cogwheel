@@ -2,10 +2,7 @@
 
 namespace Cogwheel.Tests.Fakes;
 
-public class FakeSettingsWithDateOnly : SettingsBase
+public class FakeSettingsWithDateOnly(string filePath) : SettingsBase(filePath)
 {
     public DateOnly DateOnlyProperty { get; set; }
-
-    public FakeSettingsWithDateOnly(string filePath)
-        : base(filePath) { }
 }

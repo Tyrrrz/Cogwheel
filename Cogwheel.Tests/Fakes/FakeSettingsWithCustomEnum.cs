@@ -1,11 +1,8 @@
 ﻿namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithCustomEnum : SettingsBase
+public partial class FakeSettingsWithCustomEnum(string filePath) : SettingsBase(filePath)
 {
     public CustomEnum CustomEnumProperty { get; set; }
-
-    public FakeSettingsWithCustomEnum(string filePath)
-        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithCustomEnum

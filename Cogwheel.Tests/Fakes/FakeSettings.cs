@@ -1,6 +1,6 @@
 ﻿namespace Cogwheel.Tests.Fakes;
 
-internal class FakeSettings : SettingsBase
+internal class FakeSettings(string filePath) : SettingsBase(filePath)
 {
     public int IntProperty { get; set; }
 
@@ -9,7 +9,4 @@ internal class FakeSettings : SettingsBase
     public string? StringProperty { get; set; }
 
     public string? StringPropertyWithDefaultValue { get; set; } = "Default value";
-
-    public FakeSettings(string filePath)
-        : base(filePath) { }
 }

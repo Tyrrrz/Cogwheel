@@ -4,13 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithUnserializableProperty : SettingsBase
+public partial class FakeSettingsWithUnserializableProperty(string filePath)
+    : SettingsBase(filePath)
 {
     [JsonConverter(typeof(BrokenJsonConverter))]
     public CustomClass? UnserializableProperty { get; set; }
-
-    public FakeSettingsWithUnserializableProperty(string filePath)
-        : base(filePath) { }
 }
 
 public partial class FakeSettingsWithUnserializableProperty
