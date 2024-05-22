@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
 namespace Cogwheel;
@@ -16,10 +14,9 @@ namespace Cogwheel;
 public abstract class SettingsBase
 {
     private readonly string _filePath;
-    private readonly JsonSerializerOptions _jsonOptions;
 
-    private readonly IReadOnlyList<PropertyInfo> _properties;
-    private readonly IReadOnlyDictionary<PropertyInfo, object?> _defaults;
+    private readonly JsonTypeInfo _rootTypeInfo;
+    private readonly IReadOnlyDictionary<JsonPropertyInfo, object?> _rootPropertyDefaults;
 
     /// <summary>
     /// Initializes an instance of <see cref="SettingsBase" />.
@@ -31,18 +28,12 @@ public abstract class SettingsBase
     protected SettingsBase(string filePath, JsonSerializerOptions jsonOptions)
     {
         _filePath = filePath;
-        _jsonOptions = jsonOptions;
 
-        _properties = GetType()
-            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-            .Where(p => p.DeclaringType != typeof(SettingsBase))
-            .Where(p => p is { CanRead: true, CanWrite: true })
-            .Where(p => p.GetCustomAttribute<JsonIgnoreAttribute>() is null)
-            .ToArray();
-
-        // Default values for properties are initialized before the constructor is called,
-        // so we can safely retrieve them here.
-        _defaults = _properties.ToDictionary(p => p, p => p.GetValue(this));
+        _rootTypeInfo = jsonOptions.GetTypeInfo(GetType());
+        _rootPropertyDefaults = _rootTypeInfo.Properties.ToDictionary(
+            p => p,
+            p => p.Get?.Invoke(this)
+        );
     }
 
     /// <summary>
@@ -75,8 +66,8 @@ public abstract class SettingsBase
     /// </summary>
     public virtual void Reset()
     {
-        foreach (var property in _properties)
-            property.SetValue(this, _defaults[property]);
+        foreach (var property in _rootTypeInfo.Properties)
+            property.Set?.Invoke(this, _rootPropertyDefaults[property]);
     }
 
     /// <summary>
@@ -85,7 +76,7 @@ public abstract class SettingsBase
     public virtual void Save()
     {
         // Write to memory first, so that we don't end up producing a corrupted file in case of an error
-        var data = JsonSerializer.SerializeToUtf8Bytes(this, _jsonOptions.GetTypeInfo(GetType()));
+        var data = JsonSerializer.SerializeToUtf8Bytes(this, _rootTypeInfo);
 
         var dirPath = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrWhiteSpace(dirPath))
@@ -112,38 +103,30 @@ public abstract class SettingsBase
                 }
             );
 
-            // This mess is required because System.Text.Json cannot populate an existing object
+            // This mess is required because System.Text.Json cannot populate an existing object.
+            // We also can't deserialize into a new object and then copy the properties over,
+            // because the target type may not have a parameterless or otherwise accessible constructor.
+            // https://github.com/dotnet/runtime/issues/92877
             foreach (var jsonProperty in document.RootElement.EnumerateObject())
             {
-                var property = _properties.FirstOrDefault(p =>
-                    string.Equals(
-                        // Use custom name if set
-                        p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? p.Name,
-                        jsonProperty.Name,
-                        StringComparison.Ordinal
-                    )
+                var property = _rootTypeInfo.Properties.FirstOrDefault(p =>
+                    string.Equals(p.Name, jsonProperty.Name, StringComparison.Ordinal)
                 );
 
                 if (property is null)
                     continue;
 
-                var jsonOptions = new JsonSerializerOptions(_jsonOptions);
+                // HACK: Use custom converter specified on the property.
+                // This will also apply the converter to any other nested properties of the same type,
+                // but unfortunately there's no way to avoid that for now.
+                var propertyOptions = new JsonSerializerOptions(property.Options);
+                if (property.CustomConverter is not null)
+                    propertyOptions.Converters.Add(property.CustomConverter);
 
-                // Use custom converter if set
-                if (
-                    property.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType
-                        is { } converterType
-                    && Activator.CreateInstance(converterType) is JsonConverter converter
-                )
-                {
-                    jsonOptions.Converters.Add(converter);
-                }
-
-                property.SetValue(
+                property.Set?.Invoke(
                     this,
-                    JsonSerializer.Deserialize(
-                        jsonProperty.Value.GetRawText(),
-                        jsonOptions.GetTypeInfo(property.PropertyType)
+                    jsonProperty.Value.Deserialize(
+                        propertyOptions.GetTypeInfo(property.PropertyType)
                     )
                 );
             }
