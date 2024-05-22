@@ -1,13 +1,9 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace Cogwheel.Tests.Fakes;
 
 internal partial class FakeSettingsWithSourceGeneration(string filePath)
-    : SettingsBase(
-        filePath,
-        new JsonSerializerOptions { TypeInfoResolver = SerializerContext.Default }
-    )
+    : SettingsBase(filePath, SerializerContext.Default)
 {
     public int IntProperty { get; set; }
 

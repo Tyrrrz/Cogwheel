@@ -44,15 +44,11 @@ To define your own application settings, create a class that inherits from `Sett
 ```csharp
 using Cogwheel;
 
-public class MySettings : SettingsBase
+public class MySettings : SettingsBase("path/to/settings.json")
 {
     public string StringSetting { get; set; } = "foo";
 
     public int IntSetting { get; set; } = 42;
-
-    public MySettings() : base("path/to/settings.json")
-    {
-    }
 }
 ```
 
@@ -90,16 +86,30 @@ You can use various attributes defined in that namespace to customize the serial
 using Cogwheel;
 using System.Text.Json.Serialization;
 
-public class MySettings : SettingsBase
+public class MySettings : SettingsBase("path/to/settings.json")
 {
     [JsonPropertyName("string_setting")]
     public string StringSetting { get; set; } = "foo";
 
     [JsonIgnore]
     public int IntSetting { get; set; } = 42;
+}
+```
 
-    public MySettings() : base("path/to/settings.json")
-    {
-    }
+If you want to use compile-time serialization as opposed to reflection-based, you need to provide a valid `IJsonTypeInfoResolver` instance, either directly or as part of `JsonSerializerOptions`:
+
+```csharp
+using Cogwheel;
+
+public class MySettings : SettingsBase(
+    "path/to/settings.json",
+    MyJsonSerializationContext.Default
+    // Or:
+    // new JsonSerializationOptions { TypeInfoResolver = MyJsonSerializationContext.Default }
+)
+{
+    public string StringSetting { get; set; } = "foo";
+
+    public int IntSetting { get; set; } = 42;
 }
 ```
