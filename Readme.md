@@ -79,6 +79,8 @@ settings.Reset();
 // settings.IntSetting == 42
 ```
 
+### Customizing behavior
+
 Under the hood, **Cogwheel** uses [`System.Text.Json`](https://docs.microsoft.com/en-us/dotnet/api/system.text.json) to serialize and deserialize settings.
 You can use various attributes defined in that namespace to customize the serialization behavior:
 
@@ -96,10 +98,31 @@ public class MySettings : SettingsBase("path/to/settings.json")
 }
 ```
 
-If you want to use compile-time serialization as opposed to reflection-based, you need to provide a valid `IJsonTypeInfoResolver` instance, either directly or as part of `JsonSerializerOptions`:
+You can also provide a custom `JsonSerializerOptions` instance to further customize the serialization process:
 
 ```csharp
 using Cogwheel;
+using System.Text.Json;
+
+public class MySettings : SettingsBase(
+    "path/to/settings.json",
+    new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
+)
+{
+    public string StringSetting { get; set; } = "foo";
+
+    public int IntSetting { get; set; } = 42;
+}
+```
+
+### Compile-time serialization
+
+If you want to use compile-time serialization as opposed to relying on reflection, you need to provide a valid `IJsonTypeInfoResolver` instance.
+You can provide it either directly or as part of a `JsonSerializerOptions` instance:
+
+```csharp
+using Cogwheel;
+using System.Text.Json.Serialization;
 
 public class MySettings : SettingsBase(
     "path/to/settings.json",
@@ -112,4 +135,11 @@ public class MySettings : SettingsBase(
 
     public int IntSetting { get; set; } = 42;
 }
+
+// Define a custom JSON serialization context for auto-generated code
+[JsonSerializable(typeof(MySettings))]
+internal partial class MyJsonSerializationContext : JsonSerializerContext;
 ```
+
+> **Note**:
+> To learn more about compile-time serialization in `System.Text.Json`, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation).
