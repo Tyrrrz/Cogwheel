@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace Cogwheel;
 
@@ -22,6 +24,10 @@ public abstract class SettingsBase
     /// <summary>
     /// Initializes an instance of <see cref="SettingsBase" />.
     /// </summary>
+    /// <remarks>
+    /// If you are relying on compile-time serialization, the <paramref name="jsonOptions" /> instance
+    /// must have a valid <see cref="JsonSerializerOptions.TypeInfoResolver"/> set.
+    /// </remarks>
     protected SettingsBase(string filePath, JsonSerializerOptions jsonOptions)
     {
         _filePath = filePath;
@@ -42,8 +48,27 @@ public abstract class SettingsBase
     /// <summary>
     /// Initializes an instance of <see cref="SettingsBase" />.
     /// </summary>
+    protected SettingsBase(string filePath, IJsonTypeInfoResolver jsonTypeInfoResolver)
+        : this(
+            filePath,
+            new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                TypeInfoResolver = jsonTypeInfoResolver
+            }
+        ) { }
+
+    /// <summary>
+    /// Initializes an instance of <see cref="SettingsBase" />.
+    /// </summary>
+    [RequiresUnreferencedCode(
+        "This constructor initializes the settings manager with reflection-based serialization, which is incompatible with assembly trimming."
+    )]
+    [RequiresDynamicCode(
+        "This constructor initializes the settings manager with reflection-based serialization, which is incompatible with ahead-of-time compilation."
+    )]
     protected SettingsBase(string filePath)
-        : this(filePath, new JsonSerializerOptions { WriteIndented = true }) { }
+        : this(filePath, new DefaultJsonTypeInfoResolver()) { }
 
     /// <summary>
     /// Resets the settings to their default values.
@@ -60,7 +85,7 @@ public abstract class SettingsBase
     public virtual void Save()
     {
         // Write to memory first, so that we don't end up producing a corrupted file in case of an error
-        var data = JsonSerializer.SerializeToUtf8Bytes(this, GetType(), _jsonOptions);
+        var data = JsonSerializer.SerializeToUtf8Bytes(this, _jsonOptions.GetTypeInfo(GetType()));
 
         var dirPath = Path.GetDirectoryName(_filePath);
         if (!string.IsNullOrWhiteSpace(dirPath))
@@ -90,14 +115,13 @@ public abstract class SettingsBase
             // This mess is required because System.Text.Json cannot populate an existing object
             foreach (var jsonProperty in document.RootElement.EnumerateObject())
             {
-                var property = _properties.FirstOrDefault(
-                    p =>
-                        string.Equals(
-                            // Use custom name if set
-                            p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? p.Name,
-                            jsonProperty.Name,
-                            StringComparison.Ordinal
-                        )
+                var property = _properties.FirstOrDefault(p =>
+                    string.Equals(
+                        // Use custom name if set
+                        p.GetCustomAttribute<JsonPropertyNameAttribute>()?.Name ?? p.Name,
+                        jsonProperty.Name,
+                        StringComparison.Ordinal
+                    )
                 );
 
                 if (property is null)
@@ -119,8 +143,7 @@ public abstract class SettingsBase
                     this,
                     JsonSerializer.Deserialize(
                         jsonProperty.Value.GetRawText(),
-                        property.PropertyType,
-                        jsonOptions
+                        jsonOptions.GetTypeInfo(property.PropertyType)
                     )
                 );
             }
