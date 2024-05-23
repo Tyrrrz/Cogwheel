@@ -44,7 +44,7 @@ To define your own application settings, create a class that inherits from `Sett
 ```csharp
 using Cogwheel;
 
-public class MySettings : SettingsBase("path/to/settings.json")
+public class MySettings() : SettingsBase("path/to/settings.json")
 {
     public string StringSetting { get; set; } = "foo";
 
@@ -88,7 +88,7 @@ You can use various attributes defined in that namespace to customize the serial
 using Cogwheel;
 using System.Text.Json.Serialization;
 
-public class MySettings : SettingsBase("path/to/settings.json")
+public class MySettings() : SettingsBase("path/to/settings.json")
 {
     [JsonPropertyName("string_setting")]
     public string StringSetting { get; set; } = "foo";
@@ -104,7 +104,7 @@ You can also provide a custom `JsonSerializerOptions` instance to further custom
 using Cogwheel;
 using System.Text.Json;
 
-public class MySettings : SettingsBase(
+public class MySettings() : SettingsBase(
     "path/to/settings.json",
     new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase }
 )
@@ -124,11 +124,11 @@ You can provide it either directly or as part of a `JsonSerializerOptions` insta
 using Cogwheel;
 using System.Text.Json.Serialization;
 
-public class MySettings : SettingsBase(
+public class MySettings() : SettingsBase(
     "path/to/settings.json",
-    MyJsonSerializationContext.Default
+    MyJsonSerializerContext.Default
     // Or:
-    // new JsonSerializationOptions { TypeInfoResolver = MyJsonSerializationContext.Default }
+    // new JsonSerializationOptions { TypeInfoResolver = MyJsonSerializerContext.Default }
 )
 {
     public string StringSetting { get; set; } = "foo";
@@ -138,7 +138,7 @@ public class MySettings : SettingsBase(
 
 // Define a custom JSON serialization context for auto-generated code
 [JsonSerializable(typeof(MySettings))]
-internal partial class MyJsonSerializationContext : JsonSerializerContext;
+internal partial class MyJsonSerializerContext : JsonSerializerContext;
 ```
 
 > **Note**:
