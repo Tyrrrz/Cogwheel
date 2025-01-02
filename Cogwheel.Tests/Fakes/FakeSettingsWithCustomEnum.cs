@@ -10,6 +10,6 @@ public partial class FakeSettingsWithCustomEnum
     public enum CustomEnum
     {
         Foo,
-        Bar
+        Bar,
     }
 }

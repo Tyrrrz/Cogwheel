@@ -45,7 +45,7 @@ public abstract class SettingsBase
             new JsonSerializerOptions
             {
                 WriteIndented = true,
-                TypeInfoResolver = jsonTypeInfoResolver
+                TypeInfoResolver = jsonTypeInfoResolver,
             }
         ) { }
 
@@ -99,7 +99,7 @@ public abstract class SettingsBase
                 new JsonDocumentOptions
                 {
                     AllowTrailingCommas = true,
-                    CommentHandling = JsonCommentHandling.Skip
+                    CommentHandling = JsonCommentHandling.Skip,
                 }
             );
 

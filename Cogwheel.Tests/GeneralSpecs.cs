@@ -33,7 +33,7 @@ public class GeneralSpecs
             IntProperty = 42,
             BoolProperty = true,
             StringProperty = "foo",
-            StringPropertyWithDefaultValue = "bar"
+            StringPropertyWithDefaultValue = "bar",
         };
 
         settings.Save();
@@ -70,8 +70,8 @@ public class GeneralSpecs
         {
             UnserializableProperty = new FakeSettingsWithUnserializableProperty.CustomClass
             {
-                Foo = "bar"
-            }
+                Foo = "bar",
+            },
         };
 
         // This is intended to fail and produce a corrupted file
@@ -94,7 +94,7 @@ public class GeneralSpecs
             IntProperty = 42,
             BoolProperty = true,
             StringProperty = "foo",
-            StringPropertyWithDefaultValue = "bar"
+            StringPropertyWithDefaultValue = "bar",
         };
 
         // Act

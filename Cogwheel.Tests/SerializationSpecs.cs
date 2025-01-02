@@ -57,7 +57,7 @@ public class SerializationSpecs
                 37,
                 00,
                 TimeSpan.FromHours(+2)
-            )
+            ),
         };
 
         // Act
@@ -77,7 +77,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithTimeSpan(file.Path)
         {
-            TimeSpanProperty = TimeSpan.FromMinutes(3.14)
+            TimeSpanProperty = TimeSpan.FromMinutes(3.14),
         };
 
         // Act
@@ -97,7 +97,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithTimeOnly(file.Path)
         {
-            TimeOnlyProperty = new TimeOnly(23, 59)
+            TimeOnlyProperty = new TimeOnly(23, 59),
         };
 
         // Act
@@ -117,7 +117,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithDateOnly(file.Path)
         {
-            DateOnlyProperty = new DateOnly(2023, 04, 28)
+            DateOnlyProperty = new DateOnly(2023, 04, 28),
         };
 
         // Act
@@ -137,7 +137,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomEnum(file.Path)
         {
-            CustomEnumProperty = FakeSettingsWithCustomEnum.CustomEnum.Bar
+            CustomEnumProperty = FakeSettingsWithCustomEnum.CustomEnum.Bar,
         };
 
         // Act
@@ -160,8 +160,8 @@ public class SerializationSpecs
             CustomClassProperty = new FakeSettingsWithCustomClass.CustomClass
             {
                 IntProperty = 42,
-                StringProperty = "foo"
-            }
+                StringProperty = "foo",
+            },
         };
 
         // Act
@@ -181,7 +181,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomImmutableClass(file.Path)
         {
-            CustomClassProperty = new FakeSettingsWithCustomImmutableClass.CustomClass(42, "foo")
+            CustomClassProperty = new FakeSettingsWithCustomImmutableClass.CustomClass(42, "foo"),
         };
 
         // Act
@@ -201,7 +201,10 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomImmutableStruct(file.Path)
         {
-            CustomStructProperty = new FakeSettingsWithCustomImmutableStruct.CustomStruct(42, "foo")
+            CustomStructProperty = new FakeSettingsWithCustomImmutableStruct.CustomStruct(
+                42,
+                "foo"
+            ),
         };
 
         // Act
@@ -221,7 +224,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomRecord(file.Path)
         {
-            CustomRecordProperty = new FakeSettingsWithCustomRecord.CustomRecord(42, "foo")
+            CustomRecordProperty = new FakeSettingsWithCustomRecord.CustomRecord(42, "foo"),
         };
 
         // Act
@@ -241,7 +244,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomStructRecord(file.Path)
         {
-            CustomRecordProperty = new FakeSettingsWithCustomStructRecord.CustomRecord(42, "foo")
+            CustomRecordProperty = new FakeSettingsWithCustomStructRecord.CustomRecord(42, "foo"),
         };
 
         // Act
@@ -278,7 +281,7 @@ public class SerializationSpecs
         using var file = TempFile.Create();
         var settings = new FakeSettingsWithCustomConverterProperty(file.Path)
         {
-            CustomConverterProperty = new FakeSettingsWithCustomConverterProperty.CustomClass()
+            CustomConverterProperty = new FakeSettingsWithCustomConverterProperty.CustomClass(),
         };
 
         settings.CustomConverterProperty.Set("foo");
@@ -302,7 +305,7 @@ public class SerializationSpecs
         {
             IntProperty = 42,
             BoolProperty = true,
-            StringProperty = "foo"
+            StringProperty = "foo",
         };
 
         // Act
@@ -323,7 +326,7 @@ public class SerializationSpecs
         var settings = new FakeSettingsWithIgnoredProperty(file.Path)
         {
             IntProperty = 42,
-            IgnoredProperty = "foo"
+            IgnoredProperty = "foo",
         };
 
         // Act
