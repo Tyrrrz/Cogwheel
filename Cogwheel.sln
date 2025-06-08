@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{98447497-B438-45B9-9268-FDEACBE94FE4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{98447497-B438-45B9-9268-FDEACBE94FE4}"
 	ProjectSection(SolutionItems) = preProject
 		License.txt = License.txt
 		Readme.md = Readme.md
