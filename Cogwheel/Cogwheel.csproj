@@ -11,19 +11,16 @@
       >true</IsAotCompatible
     >
   </PropertyGroup>
+
   <PropertyGroup>
-    <Authors>$(Company)</Authors>
-    <Description>Library for managing application settings</Description>
-    <PackageTags>settings json</PackageTags>
-    <PackageProjectUrl>https://github.com/Tyrrrz/Cogwheel</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/Tyrrrz/Cogwheel/releases</PackageReleaseNotes>
     <PackageIcon>favicon.png</PackageIcon>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
+
   <ItemGroup>
     <None Include="../favicon.png" Pack="true" PackagePath="" Visible="false" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="CSharpier.MsBuild" Version="1.1.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="all" />

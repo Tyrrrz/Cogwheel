@@ -22,4 +22,13 @@
     <EnableAotAnalyzer>false</EnableAotAnalyzer>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Authors>$(Company)</Authors>
+    <Description>Library for managing application settings</Description>
+    <PackageTags>settings json</PackageTags>
+    <PackageProjectUrl>https://github.com/Tyrrrz/Cogwheel</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Tyrrrz/Cogwheel/releases</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
 </Project>
