@@ -141,5 +141,5 @@ public class MySettings() : SettingsBase(
 internal partial class MyJsonSerializerContext : JsonSerializerContext;
 ```
 
-> **Note**:
-> To learn more about compile-time serialization in `System.Text.Json`, see the [official documentation](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/source-generation).
+> [!NOTE]
+> To learn more about compile-time serialization in `System.Text.Json`, see the [official documentation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation).
