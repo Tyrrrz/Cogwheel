@@ -1,7 +1,7 @@
 ﻿using System;
 using Cogwheel.Tests.Fakes;
-using Cogwheel.Tests.Utils;
 using FluentAssertions;
+using PowerKit;
 using Xunit;
 
 namespace Cogwheel.Tests;
