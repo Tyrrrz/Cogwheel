@@ -51,7 +51,7 @@ public class GeneralSpecs
     public void I_can_try_to_load_settings_and_not_get_an_error_if_they_were_not_previously_saved()
     {
         // Arrange
-        using var file = TempFile.Create(preCreate: false);
+        using var file = TempFile.Create(false);
         var settings = new FakeSettings(file.Path);
 
         // Act
@@ -65,7 +65,7 @@ public class GeneralSpecs
     public void I_can_try_to_load_settings_and_not_get_an_error_if_the_previous_save_operation_failed()
     {
         // Arrange
-        using var file = TempFile.Create(preCreate: false);
+        using var file = TempFile.Create(false);
         var settings = new FakeSettingsWithUnserializableProperty(file.Path)
         {
             UnserializableProperty = new FakeSettingsWithUnserializableProperty.CustomClass
@@ -125,7 +125,7 @@ public class GeneralSpecs
     public void I_can_try_to_delete_settings_and_not_get_an_error_if_they_were_not_previously_saved()
     {
         // Arrange
-        using var file = TempFile.Create(preCreate: false);
+        using var file = TempFile.Create(false);
         var settings = new FakeSettings(file.Path);
 
         // Act
