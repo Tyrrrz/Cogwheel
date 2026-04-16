@@ -1,4 +1,4 @@
-﻿namespace Cogwheel.Tests.Fakes;
+namespace Cogwheel.Tests.Fakes;
 
 internal class FakeSettingsWithNullableValue(string filePath) : SettingsBase(filePath)
 {

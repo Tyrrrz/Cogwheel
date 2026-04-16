@@ -1,4 +1,4 @@
-﻿namespace Cogwheel.Tests.Fakes;
+namespace Cogwheel.Tests.Fakes;
 
 public partial class FakeSettingsWithCustomClass(string filePath) : SettingsBase(filePath)
 {

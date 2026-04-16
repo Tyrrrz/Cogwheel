@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Cogwheel.Tests.Fakes;
 using FluentAssertions;
 using PowerKit;
