@@ -13,7 +13,7 @@ public class GeneralSpecs
     public void I_can_save_settings()
     {
         // Arrange
-        using var file = TempFile.Create();
+        using var file = TempFile.Create(false);
         var settings = new FakeSettings(file.Path);
 
         // Act
