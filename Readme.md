@@ -117,7 +117,7 @@ public class MySettings() : SettingsBase(
 
 ### Compile-time serialization
 
-If you want to use compile-time serialization as opposed to relying on reflection, you need to provide a valid `IJsonTypeInfoResolver` instance.
+If you want to use compile-time serialization as opposed to relying on reflection, you need to provide a valid `IJsonTypeInfoResolver`.
 You can provide it either directly or as part of a `JsonSerializerOptions` instance:
 
 ```csharp
