@@ -141,6 +141,8 @@ public class MySettings() : SettingsBase(
 
 // Define a custom JSON serialization context for auto-generated code
 [JsonSerializable(typeof(MySettings))]
+// Recommended: serialize enums as strings for better readability
+[JsonSourceGenerationOptions(UseStringEnumConverter = true)]
 internal partial class MyJsonSerializerContext : JsonSerializerContext;
 ```
 

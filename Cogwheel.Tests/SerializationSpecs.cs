@@ -151,6 +151,29 @@ public class SerializationSpecs
     }
 
     [Fact]
+    public void I_can_define_a_setting_of_a_custom_enum_type_and_change_member_order_without_breaking_serialization()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsWithCustomEnum(file.Path)
+        {
+            CustomEnumProperty = FakeSettingsWithCustomEnum.CustomEnum.Bar,
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsWithCustomEnum2(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings
+            .CustomEnumProperty.ToString()
+            .Should()
+            .Be(settings.CustomEnumProperty.ToString());
+    }
+
+    [Fact]
     public void I_can_define_a_setting_of_a_custom_class_type()
     {
         // Arrange
