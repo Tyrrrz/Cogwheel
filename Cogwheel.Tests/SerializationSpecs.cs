@@ -363,4 +363,32 @@ public class SerializationSpecs
         loadedSettings.IntProperty.Should().Be(settings.IntProperty);
         loadedSettings.IgnoredProperty.Should().BeNull();
     }
+
+    [Fact]
+    public void I_can_define_settings_which_are_serialized_via_reflection()
+    {
+        // Arrange
+        using var file = TempFile.Create();
+        var settings = new FakeSettingsReflection(file.Path)
+        {
+            IntProperty = 42,
+            BoolProperty = true,
+            StringProperty = "foo",
+            StringPropertyWithDefaultValue = "Default value",
+        };
+
+        // Act
+        settings.Save();
+
+        // Assert
+        var loadedSettings = new FakeSettingsReflection(file.Path);
+        loadedSettings.Load();
+
+        loadedSettings.IntProperty.Should().Be(settings.IntProperty);
+        loadedSettings.BoolProperty.Should().Be(settings.BoolProperty);
+        loadedSettings.StringProperty.Should().Be(settings.StringProperty);
+        loadedSettings
+            .StringPropertyWithDefaultValue.Should()
+            .Be(settings.StringPropertyWithDefaultValue);
+    }
 }
