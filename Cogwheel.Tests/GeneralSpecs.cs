@@ -1,7 +1,7 @@
 using System;
 using System.IO;
+using AwesomeAssertions;
 using Cogwheel.Tests.Fakes;
-using FluentAssertions;
 using PowerKit;
 using Xunit;
 
