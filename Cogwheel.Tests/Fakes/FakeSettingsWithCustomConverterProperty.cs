@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Cogwheel.Tests.Fakes;
 
 public partial class FakeSettingsWithCustomConverterProperty(string filePath)
-    : SettingsBase(filePath)
+    : SettingsBase(filePath, FakeSettingsWithCustomConverterPropertySerializerContext.Default)
 {
     [JsonConverter(typeof(CustomJsonConverter))]
     public CustomClass? CustomConverterProperty { get; set; }
@@ -25,6 +25,11 @@ public partial class FakeSettingsWithCustomConverterProperty
 
 public partial class FakeSettingsWithCustomConverterProperty
 {
+    [JsonSerializable(typeof(FakeSettingsWithCustomConverterProperty))]
+    [JsonSourceGenerationOptions(UseStringEnumConverter = true)]
+    private partial class FakeSettingsWithCustomConverterPropertySerializerContext
+        : JsonSerializerContext;
+
     private class CustomJsonConverter : JsonConverter<CustomClass>
     {
         public override CustomClass Read(
