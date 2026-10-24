@@ -82,6 +82,7 @@ settings.Reset();
 // settings.IntSetting == 42
 ```
 
+
 ### Customizing behavior
 
 Under the hood, **Cogwheel** uses [`System.Text.Json`](https://docs.microsoft.com/dotnet/api/system.text.json) to serialize and deserialize settings.
@@ -118,10 +119,11 @@ public class MySettings() : SettingsBase(
 }
 ```
 
-### Compile-time serialization
+### Static serialization
 
-If you want to use compile-time serialization as opposed to relying on reflection, you need to provide a valid `IJsonTypeInfoResolver`.
-You can provide it either directly or as part of a `JsonSerializerOptions` instance:
+If you wish to use the underlying `System.Text.Json` serialization engine in its static mode rather than rely on reflection, you need to pass a valid instance of `IJsonTypeInfoResolver` to the `SettingsBase` constructor.
+You can leverage the built-in source generator to create one for you by defining a `partial` class derived from `JsonSerializerContext` as shown below:
+
 
 ```csharp
 using Cogwheel;
@@ -151,4 +153,4 @@ public partial class MySettings
 ```
 
 > [!NOTE]
-> To learn more about compile-time serialization in `System.Text.Json`, see the [official documentation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation).
+> To learn more about source generation in `System.Text.Json`, see the [official documentation](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/source-generation).
