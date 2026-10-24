@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
 
 namespace Cogwheel;
@@ -59,7 +60,15 @@ public abstract class SettingsBase
         "This constructor initializes the settings manager with reflection-based serialization, which is incompatible with ahead-of-time compilation."
     )]
     protected SettingsBase(string filePath)
-        : this(filePath, new DefaultJsonTypeInfoResolver()) { }
+        : this(
+            filePath,
+            new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                TypeInfoResolver = new DefaultJsonTypeInfoResolver(),
+                Converters = { new JsonStringEnumConverter() },
+            }
+        ) { }
 
     /// <summary>
     /// Resets the settings to their default values.
