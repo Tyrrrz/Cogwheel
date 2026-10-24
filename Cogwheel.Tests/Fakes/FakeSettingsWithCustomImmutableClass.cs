@@ -1,6 +1,9 @@
+using System.Text.Json.Serialization;
+
 namespace Cogwheel.Tests.Fakes;
 
-public partial class FakeSettingsWithCustomImmutableClass(string filePath) : SettingsBase(filePath)
+public partial class FakeSettingsWithCustomImmutableClass(string filePath)
+    : SettingsBase(filePath, FakeSettingsWithCustomImmutableClassSerializerContext.Default)
 {
     public CustomClass? CustomClassProperty { get; set; }
 }
@@ -13,4 +16,12 @@ public partial class FakeSettingsWithCustomImmutableClass
 
         public string StringProperty { get; } = stringProperty;
     }
+}
+
+public partial class FakeSettingsWithCustomImmutableClass
+{
+    [JsonSerializable(typeof(FakeSettingsWithCustomImmutableClass))]
+    [JsonSourceGenerationOptions(UseStringEnumConverter = true)]
+    private partial class FakeSettingsWithCustomImmutableClassSerializerContext
+        : JsonSerializerContext;
 }

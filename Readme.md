@@ -84,7 +84,7 @@ settings.Reset();
 
 ### Customizing behavior
 
-Under the hood, **Cogwheel** uses [`System.Text.Json`](https://docs.microsoft.com/en-us/dotnet/api/system.text.json) to serialize and deserialize settings.
+Under the hood, **Cogwheel** uses [`System.Text.Json`](https://docs.microsoft.com/dotnet/api/system.text.json) to serialize and deserialize settings.
 You can use various attributes defined in that namespace to customize the serialization behavior:
 
 ```csharp
@@ -127,11 +127,11 @@ You can provide it either directly or as part of a `JsonSerializerOptions` insta
 using Cogwheel;
 using System.Text.Json.Serialization;
 
-public class MySettings() : SettingsBase(
+public partial class MySettings() : SettingsBase(
     "path/to/settings.json",
-    MyJsonSerializerContext.Default
+    MySettingsSerializerContext.Default
     // Or:
-    // new JsonSerializationOptions { TypeInfoResolver = MyJsonSerializerContext.Default }
+    // new JsonSerializerOptions { TypeInfoResolver = MySettingsSerializerContext.Default }
 )
 {
     public string StringSetting { get; set; } = "foo";
@@ -139,11 +139,15 @@ public class MySettings() : SettingsBase(
     public int IntSetting { get; set; } = 42;
 }
 
-// Define a custom JSON serialization context for auto-generated code
-[JsonSerializable(typeof(MySettings))]
-// Recommended: serialize enums as strings for better readability
-[JsonSourceGenerationOptions(UseStringEnumConverter = true)]
-internal partial class MyJsonSerializerContext : JsonSerializerContext;
+// Keep serialization context in a separate partial class for organization
+public partial class MySettings
+{
+    // Define a custom JSON serialization context for source-generated code
+    [JsonSerializable(typeof(MySettings))]
+    // Recommended: serialize enums as strings for better readability
+    [JsonSourceGenerationOptions(UseStringEnumConverter = true)]
+    private partial class MySettingsSerializerContext : JsonSerializerContext;
+}
 ```
 
 > [!NOTE]
