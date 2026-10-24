@@ -22,7 +22,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithNullableValue(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.NullableIntProperty.Should().Be(settings.NullableIntProperty);
     }
 
     [Fact]
@@ -39,7 +39,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithNullableValue(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.NullableIntProperty.Should().Be(settings.NullableIntProperty);
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithDateTimeOffset(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.DateTimeOffsetProperty.Should().Be(settings.DateTimeOffsetProperty);
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithTimeSpan(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.TimeSpanProperty.Should().Be(settings.TimeSpanProperty);
     }
 
     [Fact]
@@ -107,7 +107,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithTimeOnly(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.TimeOnlyProperty.Should().Be(settings.TimeOnlyProperty);
     }
 
     [Fact]
@@ -127,7 +127,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithDateOnly(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.DateOnlyProperty.Should().Be(settings.DateOnlyProperty);
     }
 
     [Fact]
@@ -147,7 +147,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomEnum(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.CustomEnumProperty.Should().Be(settings.CustomEnumProperty);
     }
 
     [Fact]
@@ -171,7 +171,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomClass(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.CustomClassProperty.Should().BeEquivalentTo(settings.CustomClassProperty);
     }
 
     [Fact]
@@ -191,7 +191,12 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomImmutableClass(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings
+            .CustomClassProperty.IntProperty.Should()
+            .Be(settings.CustomClassProperty.IntProperty);
+        loadedSettings
+            .CustomClassProperty.StringProperty.Should()
+            .Be(settings.CustomClassProperty.StringProperty);
     }
 
     [Fact(Skip = "STJ does not support default parameterized constructors in structs")]
@@ -214,7 +219,13 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomImmutableStruct(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.CustomStructProperty.Should().NotBeNull();
+        loadedSettings
+            .CustomStructProperty?.IntProperty.Should()
+            .Be(settings.CustomStructProperty?.IntProperty);
+        loadedSettings
+            .CustomStructProperty?.StringProperty.Should()
+            .Be(settings.CustomStructProperty?.StringProperty);
     }
 
     [Fact]
@@ -234,7 +245,12 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomRecord(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings
+            .CustomRecordProperty.IntProperty.Should()
+            .Be(settings.CustomRecordProperty.IntProperty);
+        loadedSettings
+            .CustomRecordProperty.StringProperty.Should()
+            .Be(settings.CustomRecordProperty.StringProperty);
     }
 
     [Fact]
@@ -254,7 +270,12 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomStructRecord(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings
+            .CustomRecordProperty.IntProperty.Should()
+            .Be(settings.CustomRecordProperty.IntProperty);
+        loadedSettings
+            .CustomRecordProperty.StringProperty.Should()
+            .Be(settings.CustomRecordProperty.StringProperty);
     }
 
     [Fact]
@@ -271,7 +292,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithNamedProperty(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.IntProperty.Should().Be(settings.IntProperty);
     }
 
     [Fact]
@@ -293,7 +314,9 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithCustomConverterProperty(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings
+            .CustomConverterProperty.Value.Should()
+            .Be(settings.CustomConverterProperty.Value);
     }
 
     [Fact]
@@ -315,7 +338,9 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithSourceGeneration(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings);
+        loadedSettings.IntProperty.Should().Be(settings.IntProperty);
+        loadedSettings.BoolProperty.Should().Be(settings.BoolProperty);
+        loadedSettings.StringProperty.Should().Be(settings.StringProperty);
     }
 
     [Fact]
@@ -336,7 +361,7 @@ public class SerializationSpecs
         var loadedSettings = new FakeSettingsWithIgnoredProperty(file.Path);
         loadedSettings.Load();
 
-        loadedSettings.Should().BeEquivalentTo(settings, o => o.Excluding(x => x.IgnoredProperty));
+        loadedSettings.IntProperty.Should().Be(settings.IntProperty);
         loadedSettings.IgnoredProperty.Should().BeNull();
     }
 }
